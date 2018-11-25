@@ -14,7 +14,7 @@ module ss_drive(
 	reg [3:0] data;
 	integer cnt;
 	
-	always @(posedge clk)
+	always @(posedge clk or posedge rst)
 		if(rst)
             begin
             cnt <= 0;
