@@ -19,6 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+`define DIVISIER 10000000
 
 module top(
     output [6:0] sseg,
@@ -57,7 +58,7 @@ module top(
     clk_div clk_div0(
        .en_out(n_clk),
        .clk(clk), .rst(rst),
-       .divided_by(1000)
+       .divided_by(`DIVISIER)
        );
     
     controller_for_state controller_for_state0(

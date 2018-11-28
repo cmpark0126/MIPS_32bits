@@ -49,6 +49,6 @@ module tb_top_after_opcode_controller();
     end
     
     initial begin
-        #50000000000 $stop;
+        #500000 $stop;
     end
 endmodule

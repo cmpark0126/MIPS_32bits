@@ -22,7 +22,7 @@
 
 module Instruction_fetch(
     output reg [31:0] instruction,
-    input [3:0] address,
+    input [31:0] address,
     input cs,
     input clk, rst 
     );
