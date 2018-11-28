@@ -25,7 +25,7 @@
 `define S4 4'd4
 `define S5 4'd5
 
-module controller(
+module controller_for_state(
     output reg [3:0] cs, ns,
     input clk, rst
     );

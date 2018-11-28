@@ -56,7 +56,7 @@ module top(
        .divided_by(100000000)
        );
     
-    controller cotroller0(
+    controller_for_state controller_for_state0(
         .cs(cs), .ns(ns),
         .clk(n_clk), .rst(rst)
         );
