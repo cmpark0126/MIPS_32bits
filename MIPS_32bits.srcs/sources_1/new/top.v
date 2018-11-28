@@ -38,7 +38,7 @@ module top(
     // for state
     wire [3:0] cs, ns;
     
-    // for instruction fetch
+    // for instruction fetch (IF)
     reg [31:0] PC; // after debuging, we need to change reg to wire
     always@(posedge n_clk or posedge rst) begin
         if(rst) PC <= 32'd0;
@@ -50,7 +50,12 @@ module top(
     // for controller_for_mips_opcode
     wire RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch;
     wire [1:0] ALUOp;
-    
+     
+    //for Register (ID, WB)
+    wire [31:0] read_data1, read_data2;
+    wire [4:0] write_reg;
+    wire [31:0] write_data;
+       
     // for controller_for_debug
     wire [7:0] mask;
     wire [3:0] data7, data6, data5, data4, data3, data2, data1, data0;
@@ -79,18 +84,35 @@ module top(
         .opcode(instruction[31:26])
         );
         
+    Mux_5bits before_register(
+        .out(write_reg),
+        .in0(instruction[20:16]),.in1(instruction[15:11]),
+        .sel(RegDst)
+        );
+        
+    Register Register0(
+        .read_data1(read_data1),.read_data2(read_data2),
+        .read_reg1(instruction[25:21]),.read_reg2(instruction[20:16]), 
+        .write_reg(write_reg), .write_data(write_data),
+        .cs(cs),
+        .RegWrite(RegWrite),
+        .clk(n_clk),.rst(rst)
+        );
+        
     controller_for_debug controller_for_debug0(
         .mask(mask),
         .data7(data7), .data6(data6), .data5(data5), .data4(data4),
         .data3(data3), .data2(data2), .data1(data1), .data0(data0),
         .mode(mode),
-        // state 
+        // state (0)
         .ns(ns), .cs(cs),
-        // instruction_fetch
+        // instruction_fetch (1)
         .instruction(instruction),
-        // controller_for_mips_opcode
+        // controller_for_mips_opcode (2)
         .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
         .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
+        // Register1 (3)
+        .write_reg(write_reg), 
         // clk and rst
         .clk(clk), .rst(rst)
         );

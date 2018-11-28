@@ -61,9 +61,9 @@ module controller_for_mips_opcode( // combinational logic circuit. so do not nee
                 ALUOp[1] = 1'b0; 
                 ALUOp[0] = 1'b0; end
             sw: begin
-                RegDst   = RegDst;
+                RegDst   = 1'b0;
                 ALUSrc   = 1'b1;
-                MemtoReg = MemtoReg;
+                MemtoReg = 1'b0;
                 RegWrite = 1'b0;
                 MemRead  = 1'b0;
                 MemWrite = 1'b1;
@@ -71,9 +71,9 @@ module controller_for_mips_opcode( // combinational logic circuit. so do not nee
                 ALUOp[1] = 1'b0; 
                 ALUOp[0] = 1'b0; end
             beq: begin       
-                RegDst   = RegDst;
+                RegDst   = 1'b0;
                 ALUSrc   = 1'b0;
-                MemtoReg = MemtoReg;
+                MemtoReg = 1'b0;
                 RegWrite = 1'b0;
                 MemRead  = 1'b0;
                 MemWrite = 1'b0;

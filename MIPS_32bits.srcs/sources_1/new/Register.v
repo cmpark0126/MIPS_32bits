@@ -22,9 +22,10 @@
 
 module Register(
     output reg [31:0] read_data1, read_data2,
-    input [3:0] read_reg1, read_reg2, write_reg, 
+    input [4:0] read_reg1, read_reg2, write_reg, 
     input [31:0] write_data,
     input [3:0] cs,
+    input RegWrite,
     input clk, rst 
     );
     
@@ -42,7 +43,7 @@ module Register(
                 temp1 <= mips_register_set[read_reg1];
                 temp2 <= mips_register_set[read_reg2];
             end
-            else if(cs == WB) begin
+            else if(cs == WB && RegWrite == 1'b1) begin
                 temp1 <= write_data;
             end
             else begin 
@@ -64,7 +65,7 @@ module Register(
                 read_data1 <= temp1;
                 read_data2 <= temp2;
             end 
-            else if(cs == WB) begin
+            else if(cs == WB && RegWrite == 1'b1) begin
                 mips_register_set[write_reg] <= (write_reg != 4'd0)? 32'd0 : write_data; // when write_reg is 0, illegal access, so maintain zero
             end
             else ;

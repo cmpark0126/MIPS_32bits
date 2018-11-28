@@ -30,7 +30,7 @@ module Instruction_fetch(
     parameter IF = 4'd0;
     
     /*
-    * purpose : Fetch instruction from BRAM  // instruction <= {BRAM[PC], BRAM[PC + 1], BRAM[PC + 2], BRAM[PC + 3]};
+    * purpose : Fetch instruction from BRAM(instruction memory)  // instruction <= {BRAM[PC], BRAM[PC + 1], BRAM[PC + 2], BRAM[PC + 3]};
     * psuedo code :
         if posedge clk : fetch value from BRAM and target_address (PC)
         if negedge clk : read fetched value and save to instruction value (output port) 
