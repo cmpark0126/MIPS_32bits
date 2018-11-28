@@ -4,3 +4,8 @@
 #3 implement Execution            :
 #4 Implement Data access          :
 #5 Implement Write-back           :
+
+// Interface
+#6 Implement uart                 :
+#7 Implement sseg                 :
+#8 Implement vga                  :
