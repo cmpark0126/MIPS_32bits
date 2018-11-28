@@ -33,6 +33,7 @@ module controller(
     always @ (posedge clk or posedge rst) begin
         if(rst)
             cs <= `S0;
+            // Do we reset 'ns' also?
         else
             cs <= ns;
     end
