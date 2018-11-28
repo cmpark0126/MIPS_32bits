@@ -20,8 +20,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Instruction_decode(
-    output [31:0] read_data1, read_data2,
+module Register(
+    output reg [31:0] read_data1, read_data2,
     input [3:0] read_reg1, read_reg2, write_reg, 
     input [31:0] write_data,
     input [3:0] cs,
@@ -37,18 +37,36 @@ module Instruction_decode(
             if(rst) begin
                 temp1 <= 32'd0;
                 temp2 <= 32'd0;
-                // we should not need reset register set.
-                // previous value will be considered garbage value
             end
             else if(cs == ID) begin
+                temp1 <= mips_register_set[read_reg1];
+                temp2 <= mips_register_set[read_reg2];
+            end
+            else if(cs == WB) begin
+                temp1 <= write_data;
             end
             else begin 
+                temp1 <= temp1;
+                temp2 <= temp2;
             end
         end
         
         always @(negedge clk or posedge rst) begin // do we need only this part? can we squiz?
-            if(rst) ;
-            else if(cs == ID) ;
+            // should we use rst to reset all register set
+            // I think we should not need reset register set.
+            // previous value will be considered garbage value
+            if(rst) begin 
+                mips_register_set[0] <= 32'd0; // for zero register
+                read_data1 <= 32'd0;
+                read_data2 <= 32'd0;
+            end
+            else if(cs == ID) begin
+                read_data1 <= temp1;
+                read_data2 <= temp2;
+            end 
+            else if(cs == WB) begin
+                mips_register_set[write_reg] <= (write_reg != 4'd0)? 32'd0 : write_data; // when write_reg is 0, illegal access, so maintain zero
+            end
             else ;
         end
     
