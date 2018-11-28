@@ -18,29 +18,30 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-`define S0 4'd0
-`define S1 4'd1
-`define S2 4'd2
-`define S3 4'd3
-`define S4 4'd4
-`define S5 4'd5
+
 
 module controller_for_state(
     output reg [3:0] cs, ns,
     input clk, rst
     );
     
+    parameter IF  = 4'd0;
+    parameter ID  = 4'd1;
+    parameter EX  = 4'd2;
+    parameter MEM = 4'd3;
+    parameter WB  = 4'd4;
+    
     always @ (posedge clk or posedge rst) begin
         if(rst)
-            cs <= `S0;
-            // Do we reset 'ns' also?
+            cs <= IF;
+            // Do we need to reset 'ns' also?
         else
             cs <= ns;
     end
     
     always @ (*) begin
         case(cs)
-            `S5 : ns = `S0;
+            WB : ns = IF;
             default : ns = (cs + 1); 
         endcase
     end

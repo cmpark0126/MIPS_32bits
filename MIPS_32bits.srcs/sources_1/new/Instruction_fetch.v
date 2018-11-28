@@ -23,9 +23,11 @@
 module Instruction_fetch(
     output reg [31:0] instruction,
     input [31:0] address,
-    input cs,
+    input [3:0] cs,
     input clk, rst 
     );
+    
+    parameter IF = 4'd0;
     
     /*
     * purpose : Fetch instruction from BRAM  // instruction <= {BRAM[PC], BRAM[PC + 1], BRAM[PC + 2], BRAM[PC + 3]};
@@ -50,7 +52,7 @@ module Instruction_fetch(
             fetched_value[2] <= 8'd0;
             fetched_value[3] <= 8'd0;
         end
-        else if(cs == 4'd0) begin
+        else if(cs == IF) begin
             fetched_value[0] <= BRAM[address];
             fetched_value[1] <= BRAM[address + 1];
             fetched_value[2] <= BRAM[address + 2];
@@ -66,7 +68,7 @@ module Instruction_fetch(
     
     always @(negedge clk or posedge rst) begin // do we need only this part? can we squiz?
         if(rst) instruction <= 32'd0;
-        else if(cs == 4'd0) instruction <= {fetched_value[0], fetched_value[1], fetched_value[2], fetched_value[3]};
+        else if(cs == IF) instruction <= {fetched_value[0], fetched_value[1], fetched_value[2], fetched_value[3]};
         else instruction <= instruction;
     end
     
