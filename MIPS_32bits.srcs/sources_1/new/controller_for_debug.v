@@ -24,10 +24,14 @@ module controller_for_debug(
     output reg [7:0] mask,
     output reg [3:0] data7, data6, data5, data4, data3, data2, data1, data0,
     input [3:0] mode,
-    // state 
+    // state (0)
     input [3:0] ns, cs,
-    // instruction_fetch
+    // instruction_fetch (1)
     input [31:0] instruction,
+    // controller_for_mips_opcode (2)
+    input RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch,
+    input [1:0] ALUOp,
+    // clk and rst
     input clk, rst
     );
     
@@ -43,17 +47,24 @@ module controller_for_debug(
                     data1 = ns;
                     data0 = cs;
                     end
-                default : begin
+                4'd1 : begin
                     mask = 8'b1111_1111;
                     {data7, data6, data5, data4, data3, data2, data1, data0} = instruction;
-    //                data7 = instruction[31:28];
-    //                data6 = instruction[27:24];
-    //                data5 = instruction[23:20];
-    //                data4 = instruction[19:16];
-    //                data3 = instruction[15:12];
-    //                data2 = instruction[11:8];
-    //                data1 = instruction[7:4];
-    //                data0 = instruction[3:0];
+                    end
+                4'd2 : begin
+                    mask = 8'b1111_1111;
+                    data7 = {3'b000, RegDst};
+                    data6 = {3'b000, ALUSrc};
+                    data5 = {3'b000, MemtoReg};
+                    data4 = {3'b000, RegWrite};
+                    data3 = {3'b000, MemRead};
+                    data2 = {3'b000, MemWrite};
+                    data1 = {3'b000, Branch};
+                    data0 = {2'b00, ALUOp};
+                    end
+                default : begin
+                    mask = 8'b0000_0000;
+                    {data7, data6, data5, data4, data3, data2, data1, data0} = 32'd0;
                     end
             endcase
         end

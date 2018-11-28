@@ -38,13 +38,17 @@ module top(
     wire [3:0] cs, ns;
     
     // for instruction fetch
-    reg [31:0] PC;
+    reg [31:0] PC; // after debuging, we need to change reg to wire
     always@(posedge n_clk or posedge rst) begin
         if(rst) PC <= 32'd0;
-        else if(cs == 4'd0) PC <= (PC == 32'd4)? 0:PC+4;
+        else if(cs == 4'd0) PC <= (PC == 32'd12)? 0:PC+4;
         else PC <= PC;
     end // for debug
     wire [31:0] instruction;
+    
+    // for controller_for_mips_opcode
+    wire RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch;
+    wire [1:0] ALUOp;
     
     // for controller_for_debug
     wire [7:0] mask;
@@ -53,7 +57,7 @@ module top(
     clk_div clk_div0(
        .en_out(n_clk),
        .clk(clk), .rst(rst),
-       .divided_by(100000000)
+       .divided_by(1000)
        );
     
     controller_for_state controller_for_state0(
@@ -65,7 +69,13 @@ module top(
         .instruction(instruction),
         .address(PC),
         .cs(cs),
-        .clk(n_clk), .rst(rst) 
+        .clk(n_clk), .rst(rst)
+        );
+        
+    controller_for_mips_opcode controller_for_mips_opcode0(
+        .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
+        .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
+        .opcode(instruction[31:26])
         );
         
     controller_for_debug controller_for_debug0(
@@ -77,6 +87,10 @@ module top(
         .ns(ns), .cs(cs),
         // instruction_fetch
         .instruction(instruction),
+        // controller_for_mips_opcode
+        .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
+        .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
+        // clk and rst
         .clk(clk), .rst(rst)
         );
 
