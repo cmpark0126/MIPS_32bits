@@ -45,6 +45,7 @@ module top(
         else if(cs == 4'd0) PC <= (PC == 32'd12)? 0:PC+4;
         else PC <= PC;
     end // for debug
+    wire [31:0] PCadd4;
     wire [31:0] instruction;
     
     // for controller_for_mips_opcode
@@ -74,6 +75,13 @@ module top(
     Instruction_fetch Instruction_fetch0(
         .instruction(instruction),
         .address(PC),
+        .cs(cs),
+        .clk(n_clk), .rst(rst)
+        );
+    
+    Add4toPC(
+        .outPC(PCadd4),
+        .inPC(PC),
         .cs(cs),
         .clk(n_clk), .rst(rst)
         );
