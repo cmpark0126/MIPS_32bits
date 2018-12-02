@@ -33,8 +33,10 @@ module controller_for_debug(
     input [1:0] ALUOp,
     // Register (3)
     input [4:0] write_reg,
-    // Execution (4)
+    // Executio1 (4)
     input [3:0] ALU_operation,
+    // Execution2 (5)
+    input [31:0] ALU_result,
     // clk and rst
     input clk, rst
     );
@@ -79,6 +81,10 @@ module controller_for_debug(
                     data2 = ALU_operation[2];
                     data1 = ALU_operation[1];
                     data0 = ALU_operation[0];
+                    end
+                4'd5 : begin
+                    mask = 8'b1111_1111;
+                    {data7, data6, data5, data4, data3, data2, data1, data0} = ALU_result;
                     end
                 default : begin
                     mask = 8'b0000_0000;

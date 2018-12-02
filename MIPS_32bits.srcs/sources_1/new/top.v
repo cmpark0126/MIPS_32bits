@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`define DIVISIER 10000000
+`define DIVISIER 10
 
 module top(
     output [6:0] sseg,
@@ -151,7 +151,17 @@ module top(
         .Function_field(instruction[5:0]),
         .ALUOp(ALUOp)
         );
+    
+    ALU ALU0(
+        .ALU_result(ALU_result),
+        .ALU_zero(ALU_zero),
+        .in0(read_data1),.in1(selected_data),
+        .ALU_operation(ALU_operation),
+        .cs(cs),
+        .clk(n_clk), .rst(rst)
+        );
         
+    // sseg for Debug
     controller_for_debug controller_for_debug0(
         .mask(mask),
         .data7(data7), .data6(data6), .data5(data5), .data4(data4),
@@ -166,8 +176,10 @@ module top(
         .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
         // Register (3)
         .write_reg(write_reg), 
-        // Execution (4)
+        // Execution1 (4)
         .ALU_operation(ALU_operation),
+        // Execution2 (5)
+        .ALU_result(ALU_result),
         // clk and rst
         .clk(clk), .rst(rst)
         );
