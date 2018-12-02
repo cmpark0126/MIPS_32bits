@@ -56,6 +56,10 @@ module top(
     wire [31:0] read_data1, read_data2;
     wire [4:0] write_reg;
     wire [31:0] write_data;
+    wire [31:0] extended;
+    
+    //for Execution
+    wire [31:0] shifted;
        
     // for controller_for_debug
     wire [7:0] mask;
@@ -73,11 +77,10 @@ module top(
         );
         
     // IF
-    
     Mux_32bits select_next_pc(
         .out(PC),
         .in0(PCadd4),.in1(),
-        .sel(1'b0) // it will be jump
+        .sel(1'b0) // it will be branch
         );
     
     Instruction_fetch Instruction_fetch0(
@@ -87,7 +90,7 @@ module top(
         .clk(n_clk), .rst(rst)
         );
     
-    Add4toPC(
+    Add4toPC Add4toPC0(
         .outPC(PCadd4),
         .inPC(PC),
         .cs(cs),
@@ -95,7 +98,6 @@ module top(
         );
         
     // ID    
-    
     controller_for_mips_opcode controller_for_mips_opcode0(
         .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
         .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
@@ -108,7 +110,7 @@ module top(
         .sel(RegDst)
         );
         
-    Register Register0(
+    Register Register0( // ID & WB
         .read_data1(read_data1),.read_data2(read_data2),
         .read_reg1(instruction[25:21]),.read_reg2(instruction[20:16]), 
         .write_reg(write_reg), .write_data(write_data),
@@ -116,6 +118,17 @@ module top(
         .RegWrite(RegWrite),
         .clk(n_clk),.rst(rst)
         );
+    
+    Sign_extend_16to32bits Sign_extend_16to32bits0(
+        .out(extended),
+        .in(instruction[15:0])
+    );
+    
+    // EX
+    Shift_register_left_2bits Shift_register_left_2bits0(
+        .out(shifted),
+        .in(extended)
+    );
         
     controller_for_debug controller_for_debug0(
         .mask(mask),
