@@ -47,6 +47,7 @@ module top(
 //    end // for debug
     wire [31:0] PCadd4;
     wire [31:0] instruction;
+    wire PC_selector;
     
     // for controller_for_mips_opcode
     wire RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch;
@@ -85,10 +86,12 @@ module top(
         );
         
     // IF
+    assign PC_selector = ALU_zero & Branch;
+    
     Mux_32bits select_next_pc(
         .out(PC),
         .in0(PCadd4),.in1(branched_address),
-        .sel((ALU_zero & Branch)) // it will be branch, ALU-zero (and gate)
+        .sel(PC_selector) // it will be branch, ALU-zero (and gate)
         );
     
     Instruction_fetch Instruction_fetch0(
