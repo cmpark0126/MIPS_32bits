@@ -60,6 +60,8 @@ module top(
     
     //for Execution
     wire [31:0] shifted;
+    wire [31:0] selected_data;
+    wire [31:0] branched_address;
        
     // for controller_for_debug
     wire [7:0] mask;
@@ -79,7 +81,7 @@ module top(
     // IF
     Mux_32bits select_next_pc(
         .out(PC),
-        .in0(PCadd4),.in1(),
+        .in0(PCadd4),.in1(branched_address),
         .sel(1'b0) // it will be branch
         );
     
@@ -129,6 +131,17 @@ module top(
         .out(shifted),
         .in(extended)
     );
+    
+    Mux_32bits select_data(
+        .out(selected_data),
+        .in0(read_data2),.in1(extended),
+        .sel(1'b0) // it will be ALUsrc
+        );
+    
+    Add_32bits add_pc_and_shifted(
+        .out(branched_address),
+        .in0(PCadd4),.in1(shifted)
+        );
         
     controller_for_debug controller_for_debug0(
         .mask(mask),

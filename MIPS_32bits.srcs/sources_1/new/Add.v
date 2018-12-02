@@ -36,3 +36,12 @@ module Add4toPC(
     end
     
 endmodule
+
+module Add_32bits( // combinational logic circuit. so do not need clk
+    output [31:0] out,
+    input [31:0] in0, in1
+    );
+    
+    assign out = in0 + in1;
+    
+endmodule
