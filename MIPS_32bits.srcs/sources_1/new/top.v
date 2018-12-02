@@ -65,6 +65,9 @@ module top(
     wire [3:0] ALU_operation;
     wire [31:0] ALU_result;
     wire ALU_zero;
+    
+    // for memory read
+    wire [31:0] read_data_from_memory;
        
     // for controller_for_debug
     wire [7:0] mask;
@@ -85,7 +88,7 @@ module top(
     Mux_32bits select_next_pc(
         .out(PC),
         .in0(PCadd4),.in1(branched_address),
-        .sel(1'b0) // it will be branch, ALU-zero (and gate)
+        .sel((ALU_zero & Branch)) // it will be branch, ALU-zero (and gate)
         );
     
     Instruction_fetch Instruction_fetch0(
@@ -120,7 +123,7 @@ module top(
         .read_reg1(instruction[25:21]),.read_reg2(instruction[20:16]), 
         .write_reg(write_reg), .write_data(write_data),
         .cs(cs),
-        .RegWrite(1'b0), // will be RegWrite
+        .RegWrite(RegWrite),
         .clk(n_clk),.rst(rst)
         );
     
@@ -138,7 +141,7 @@ module top(
     Mux_32bits select_data(
         .out(selected_data),
         .in0(read_data2),.in1(extended),
-        .sel(1'b0) // it will be ALUsrc
+        .sel(ALUSrc)
         );
     
     Add_32bits add_pc_and_shifted(
@@ -161,6 +164,22 @@ module top(
         .ALU_operation(ALU_operation),
         .cs(cs),
         .clk(n_clk), .rst(rst)
+        );
+        
+    // Mem
+    Memory_access Memory_access0(
+        .read_data_from_memory(read_data_from_memory),
+        .address_for_memory(ALU_result),
+        .write_data_for_memory(read_data2),
+        .cs(cs),
+        .MemRead(MemRead), .MemWrite(MemWrite),
+        .clk(n_clk), .rst(rst)
+        );
+    
+    Mux_32bits select_write_data(
+        .out(write_data),
+        .in0(ALU_result),.in1(read_data_from_memory),
+        .sel(MemtoReg)
         );
         
     // sseg for Debug
