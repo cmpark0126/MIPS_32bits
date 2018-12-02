@@ -39,12 +39,12 @@ module top(
     wire [3:0] cs, ns;
     
     // for instruction fetch (IF)
-    reg [31:0] PC; // after debuging, we need to change reg to wire
-    always@(posedge n_clk or posedge rst) begin
-        if(rst) PC <= 32'd0;
-        else if(cs == 4'd0) PC <= (PC == 32'd12)? 0:PC+4;
-        else PC <= PC;
-    end // for debug
+    wire [31:0] PC; // after debuging, we need to change reg to wire
+//    always@(posedge n_clk or posedge rst) begin
+//        if(rst) PC <= 32'd0;
+//        else if(cs == 4'd0) PC <= (PC == 32'd12)? 0:PC+4;
+//        else PC <= PC;
+//    end // for debug
     wire [31:0] PCadd4;
     wire [31:0] instruction;
     
@@ -72,6 +72,14 @@ module top(
         .clk(n_clk), .rst(rst)
         );
         
+    // IF
+    
+    Mux_32bits select_next_pc(
+        .out(PC),
+        .in0(PCadd4),.in1(),
+        .sel(1'b0) // it will be jump
+        );
+    
     Instruction_fetch Instruction_fetch0(
         .instruction(instruction),
         .address(PC),
@@ -86,13 +94,15 @@ module top(
         .clk(n_clk), .rst(rst)
         );
         
+    // ID    
+    
     controller_for_mips_opcode controller_for_mips_opcode0(
         .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
         .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
         .opcode(instruction[31:26])
         );
         
-    Mux_5bits before_register(
+    Mux_5bits select_next_write_register(
         .out(write_reg),
         .in0(instruction[20:16]),.in1(instruction[15:11]),
         .sel(RegDst)
