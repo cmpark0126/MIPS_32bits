@@ -31,8 +31,10 @@ module controller_for_debug(
     // controller_for_mips_opcode (2)
     input RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch,
     input [1:0] ALUOp,
-    // Register1 (3)
+    // Register (3)
     input [4:0] write_reg,
+    // Execution (4)
+    input [3:0] ALU_operation,
     // clk and rst
     input clk, rst
     );
@@ -70,6 +72,13 @@ module controller_for_debug(
                     {data5, data4} = {3'b000, instruction[20:16]};
                     {data3, data2} = {3'b000, instruction[15:11]};
                     {data1, data0} = {3'b000, write_reg};
+                    end
+                4'd4 : begin
+                    mask = 8'b0000_1111;
+                    data3 = ALU_operation[3];
+                    data2 = ALU_operation[2];
+                    data1 = ALU_operation[1];
+                    data0 = ALU_operation[0];
                     end
                 default : begin
                     mask = 8'b0000_0000;

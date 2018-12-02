@@ -62,6 +62,9 @@ module top(
     wire [31:0] shifted;
     wire [31:0] selected_data;
     wire [31:0] branched_address;
+    wire [3:0] ALU_operation;
+    wire [31:0] ALU_result;
+    wire ALU_zero;
        
     // for controller_for_debug
     wire [7:0] mask;
@@ -82,7 +85,7 @@ module top(
     Mux_32bits select_next_pc(
         .out(PC),
         .in0(PCadd4),.in1(branched_address),
-        .sel(1'b0) // it will be branch
+        .sel(1'b0) // it will be branch, ALU-zero (and gate)
         );
     
     Instruction_fetch Instruction_fetch0(
@@ -142,6 +145,12 @@ module top(
         .out(branched_address),
         .in0(PCadd4),.in1(shifted)
         );
+    
+    ALU_contorl ALU_contorl0(
+        .ALU_operation(ALU_operation),
+        .Function_field(instruction[5:0]),
+        .ALUOp(ALUOp)
+        );
         
     controller_for_debug controller_for_debug0(
         .mask(mask),
@@ -155,8 +164,10 @@ module top(
         // controller_for_mips_opcode (2)
         .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
         .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
-        // Register1 (3)
+        // Register (3)
         .write_reg(write_reg), 
+        // Execution (4)
+        .ALU_operation(ALU_operation),
         // clk and rst
         .clk(clk), .rst(rst)
         );
