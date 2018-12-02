@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`define DIVISIER 10
+`define DIVISIER 10000000
 
 module top(
     output [6:0] sseg,
@@ -120,7 +120,7 @@ module top(
         .read_reg1(instruction[25:21]),.read_reg2(instruction[20:16]), 
         .write_reg(write_reg), .write_data(write_data),
         .cs(cs),
-        .RegWrite(RegWrite),
+        .RegWrite(1'b0), // will be RegWrite
         .clk(n_clk),.rst(rst)
         );
     

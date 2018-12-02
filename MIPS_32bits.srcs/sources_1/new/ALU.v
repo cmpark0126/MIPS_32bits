@@ -47,8 +47,8 @@ module ALU(
         end
         else if(cs == EX)
             case(ALU_operation)
-                ADD: temp <= in0 + in1;
-                SUB: temp <= in0 - in1;
+                ADD: temp <= (in0 + in1);
+                SUB: temp <= (in0 - in1);
                 default: temp <= 0;
             endcase
         else 
@@ -76,8 +76,8 @@ module ALU(
                 end
             endcase
         else begin
-            ALU_result <= 0;
-            ALU_zero <= 0;
+            ALU_result <= ALU_result;
+            ALU_zero <= ALU_zero;
         end
     end
     

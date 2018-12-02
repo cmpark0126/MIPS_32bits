@@ -167,8 +167,8 @@ module Register(
 //                mips_register_set[write_reg] <= #0 (write_reg != 4'd0)? 32'd0 : write_data; // when write_reg is 0, illegal access, so maintain zero
             end
             else begin
-                read_data1 <= 32'd0;
-                read_data2 <= 32'd0;
+                read_data1 <= read_data1;
+                read_data2 <= read_data2;
                 mips_register_set[0] <= 32'd0;
                 mips_register_set[1] <= mips_register_set[1];
                 mips_register_set[2] <= mips_register_set[2];
