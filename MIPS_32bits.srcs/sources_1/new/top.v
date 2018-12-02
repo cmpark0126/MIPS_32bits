@@ -143,7 +143,9 @@ module top(
     
     Add_32bits add_pc_and_shifted(
         .out(branched_address),
-        .in0(PCadd4),.in1(shifted)
+        .in0(PCadd4),.in1(shifted),
+        .cs(cs),
+        .clk(n_clk), .rst(rst)
         );
     
     ALU_contorl ALU_contorl0(

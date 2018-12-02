@@ -37,11 +37,21 @@ module Add4toPC(
     
 endmodule
 
-module Add_32bits( // combinational logic circuit. so do not need clk
-    output [31:0] out,
-    input [31:0] in0, in1
+module Add_32bits(
+    output reg [31:0] out,
+    input [31:0] in0, in1,
+    input [3:0] cs,
+    input clk, rst
     );
     
-    assign out = in0 + in1;
+    parameter EX  = 4'd2;
+    
+    always @(negedge clk or posedge rst) begin // this time we use negedge, because write action in here
+       if(rst) out <= 32'd0;
+       else if(cs == EX) out <= in0 + in1;
+       else out <= out;
+    end
+    
+//    assign out = in0 + in1;
     
 endmodule
