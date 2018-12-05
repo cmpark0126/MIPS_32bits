@@ -31,10 +31,8 @@ module datapath(
     );
     
     // for instruction fetch (IF)
-    wire [31:0] PC; 
     wire [31:0] PCadd4;
     wire [31:0] instruction;
-    wire PC_selector;
     
     // for controller_for_mips_opcode
     wire RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch;
@@ -58,27 +56,14 @@ module datapath(
     wire [31:0] read_data_from_memory;
     
     // IF
-    assign PC_selector = ALU_zero & Branch;
-    
-    Mux_32bits select_next_pc(
-        .out(PC),
-        .in0(PCadd4),.in1(branched_address),
-        .sel(PC_selector) // it will be branch, ALU-zero (and gate)
-        );
-    
-    Instruction_fetch Instruction_fetch0(
-        .instruction(instruction),
-        .address(PC),
-        .cs(cs),
-        .clk(clk), .rst(rst)
-        );
-    
-    Add4toPC Add4toPC0(
-        .outPC(PCadd4),
-        .inPC(PC),
-        .cs(cs),
-        .clk(clk), .rst(rst)
-        );
+    IF IF0(
+    .instruction(instruction),
+    .PCadd4(PCadd4),
+    .ALU_zero(ALU_zero), .Branch(Branch),
+    .branched_address(branched_address),
+    .cs(cs),
+    .clk(clk), .rst(rst)
+    );
         
     // ID    
     controller_for_mips_opcode controller_for_mips_opcode0(
