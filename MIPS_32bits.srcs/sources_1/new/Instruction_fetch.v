@@ -38,19 +38,19 @@ module Instruction_fetch(
     
     // for debug
     wire [7:0] BRAM [0:15];
-    assign {BRAM[0], BRAM[1], BRAM[2], BRAM[3]} = {6'd0, 5'd18, 5'd19, 5'd17, 5'd0, 6'd32}; // add $s1, $s2, $s3
-    assign {BRAM[4], BRAM[5], BRAM[6], BRAM[7]} = {6'd35, 5'd18, 5'd17, 16'd100}; // lw $s1, 100($s2)
-    assign {BRAM[8], BRAM[9], BRAM[10], BRAM[11]} = {6'd43, 5'd18, 5'd17, 16'd100}; // sw $s1, 100($s2)
-    assign {BRAM[12], BRAM[13], BRAM[14], BRAM[15]} = {6'b000_100, 5'd8, 5'd21, 16'd100}; // 
+    assign {BRAM[0], BRAM[1], BRAM[2], BRAM[3]} = 32'h2008_0005; // add $s1, $s2, $s3
+    assign {BRAM[4], BRAM[5], BRAM[6], BRAM[7]} = 32'h0100_4820; // lw $s1, 100($s2)
+    assign {BRAM[8], BRAM[9], BRAM[10], BRAM[11]} = 32'h0128_5020; // sw $s1, 100($s2)
+    assign {BRAM[12], BRAM[13], BRAM[14], BRAM[15]} = 32'h1000_0001; // 
     
     reg [7:0] fetched_value [0:3];
     
     always @(posedge clk or posedge rst) begin
         if(rst) begin
-            fetched_value[0] <= 8'd0;
-            fetched_value[1] <= 8'd0;
-            fetched_value[2] <= 8'd0;
-            fetched_value[3] <= 8'd0;
+            fetched_value[0] <= BRAM[address];
+            fetched_value[1] <= BRAM[address + 1];
+            fetched_value[2] <= BRAM[address + 2];
+            fetched_value[3] <= BRAM[address + 3];
         end
         else if(cs == IF) begin
             fetched_value[0] <= BRAM[address];

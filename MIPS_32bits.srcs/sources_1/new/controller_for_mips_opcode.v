@@ -34,6 +34,7 @@ module controller_for_mips_opcode( // combinational logic circuit. so do not nee
     
     // temparary parameter
     parameter [5:0] R_format    = 6'b000000;
+    parameter [5:0] addi        = 6'b001000;
     parameter [5:0] lw          = 6'b100011;
     parameter [5:0] sw          = 6'b101011;
     parameter [5:0] beq         = 6'b000100;
@@ -49,6 +50,16 @@ module controller_for_mips_opcode( // combinational logic circuit. so do not nee
                 MemWrite = 1'b0;
                 Branch   = 1'b0;
                 ALUOp[1] = 1'b1; 
+                ALUOp[0] = 1'b0; end
+            addi: begin
+                RegDst   = 1'b0;
+                ALUSrc   = 1'b1;
+                MemtoReg = 1'b0;
+                RegWrite = 1'b1;
+                MemRead  = 1'b0;
+                MemWrite = 1'b0;
+                Branch   = 1'b0;
+                ALUOp[1] = 1'b0; 
                 ALUOp[0] = 1'b0; end
             lw: begin
                 RegDst   = 1'b0;

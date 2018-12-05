@@ -27,7 +27,7 @@ module tb_top_after_IF();
     reg clk, start_signal;
     wire [3:0] mode;
     
-    assign mode = 4'd5;
+    assign mode = 4'd0;
     
     top t0(
         .sseg(sseg),

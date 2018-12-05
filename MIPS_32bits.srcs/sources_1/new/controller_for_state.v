@@ -31,7 +31,7 @@ module controller_for_state(
     parameter MEM = 4'd3;
     parameter WB  = 4'd4;
     
-    always @ (posedge clk or posedge rst) begin
+    always @ (negedge clk or posedge rst) begin
         if(rst)
             cs <= IF;
             // Do we need to reset 'ns' also?
