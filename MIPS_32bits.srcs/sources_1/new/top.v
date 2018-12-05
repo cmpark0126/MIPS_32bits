@@ -19,18 +19,15 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`define DIVISIER 10
+`define DIVISOR 1000000
 
 module top(
     output [6:0] sseg,
     output DP,
     output [7:0]AN,
-    input clk, start_signal,
+    input clk, rst,
     input [3:0] mode
     );
-    
-    // for program execution
-    wire rst = ~start_signal;
     
     // for clk division
     wire n_clk;
@@ -56,7 +53,7 @@ module top(
     clk_div clk_div0(
        .en_out(n_clk),
        .clk(clk), .rst(rst),
-       .divided_by(`DIVISIER)
+       .divided_by(`DIVISOR)
        );
     
     controller_for_state controller_for_state0(
