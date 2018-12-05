@@ -19,14 +19,14 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`define DIVISOR 1000000
+`define DIVISOR 10000000
 
 module top(
     output [6:0] sseg,
     output DP,
     output [7:0]AN,
     input clk, rst,
-    input [3:0] mode
+    input mode
     );
     
     // for clk division
@@ -45,6 +45,10 @@ module top(
     wire [31:0] t8, t9;
     wire [31:0] k0, k1;
     wire [31:0] gp, sp, fp, ra;
+    
+    // for instruction
+    wire [31:0] instruction;
+    wire [31:0] instruction_by_user;
     
     // for controller_for_debug
     wire [7:0] mask;
@@ -76,10 +80,24 @@ module top(
       .t8(t8), .t9(t9), 
       .k0(k0), .k1(k1), 
       .gp(gp), .sp(sp), .fp(fp), .ra(ra),
+      .instruction(instruction),
+      .instruction_by_user(instruction_by_user),
       .cs(cs), .ns(ns),
       .mode(mode),
       .clk(n_clk), .rst(rst)
     );
+    
+    // sseg for Debug
+    controller_for_debug controller_for_debug0(
+        .mask(mask),
+        .data7(data7), .data6(data6), .data5(data5), .data4(data4),
+        .data3(data3), .data2(data2), .data1(data1), .data0(data0),
+        .mode(mode),
+        // instruction_fetch (0)
+        .instruction(instruction),
+        // clk and rst
+        .clk(clk), .rst(rst)
+        );
         
     ss_drive segment(
       .clk(clk), .rst(rst), .mask(mask),

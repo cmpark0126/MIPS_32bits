@@ -24,67 +24,22 @@ module controller_for_debug(
     output reg [7:0] mask,
     output reg [3:0] data7, data6, data5, data4, data3, data2, data1, data0,
     input [3:0] mode,
-    // state (0)
-    input [3:0] ns, cs,
-    // instruction_fetch (1)
+    // instruction_fetch (0)
     input [31:0] instruction,
-    // controller_for_mips_opcode (2)
-    input RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch,
-    input [1:0] ALUOp,
-    // Register (3)
-//    input [4:0] write_reg,
-    // Executio1 (4)
-    input [3:0] ALU_operation,
-    // Execution2 (5)
-    input [31:0] ALU_result,
     // clk and rst
     input clk, rst
     );
     
     always @(posedge clk or posedge rst) begin
         if(rst) begin
-            mask = 8'b0000_0000;
+            mask = 8'b1111_1111;
             {data7, data6, data5, data4, data3, data2, data1, data0} = 32'd0;
         end
         else begin
             case(mode)
-                4'd0: begin
-                    mask = 8'b0000_0011;
-                    data1 = ns;
-                    data0 = cs;
-                    end
-                4'd1 : begin
+                4'd0 : begin
                     mask = 8'b1111_1111;
                     {data7, data6, data5, data4, data3, data2, data1, data0} = instruction;
-                    end
-                4'd2 : begin
-                    mask = 8'b1111_1111;
-                    data7 = {3'b000, RegDst};
-                    data6 = {3'b000, ALUSrc};
-                    data5 = {3'b000, MemtoReg};
-                    data4 = {3'b000, RegWrite};
-                    data3 = {3'b000, MemRead};
-                    data2 = {3'b000, MemWrite};
-                    data1 = {3'b000, Branch};
-                    data0 = {2'b00, ALUOp};
-                    end
-//                4'd3 : begin
-//                    mask = 8'b1111_1111;
-//                    {data7, data6} = {3'b000, instruction[25:21]};
-//                    {data5, data4} = {3'b000, instruction[20:16]};
-//                    {data3, data2} = {3'b000, instruction[15:11]};
-//                    {data1, data0} = {3'b000, write_reg};
-//                    end
-                4'd4 : begin
-                    mask = 8'b0000_1111;
-                    data3 = ALU_operation[3];
-                    data2 = ALU_operation[2];
-                    data1 = ALU_operation[1];
-                    data0 = ALU_operation[0];
-                    end
-                4'd5 : begin
-                    mask = 8'b1111_1111;
-                    {data7, data6, data5, data4, data3, data2, data1, data0} = ALU_result;
                     end
                 default : begin
                     mask = 8'b0000_0000;

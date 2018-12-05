@@ -34,7 +34,10 @@ module datapath(
    output [31:0] t8, t9,
    output [31:0] k0, k1,
    output [31:0] gp, sp, fp, ra,
+   // instruction check
+   output [31:0] instruction,
    // for state
+   input [31:0] instruction_by_user,
    input [3:0] cs, ns,
    input [3:0] mode,
    input clk, rst
@@ -42,7 +45,7 @@ module datapath(
     
     // for instruction fetch (IF)
     wire [31:0] PCadd4;
-    wire [31:0] instruction;
+    wire [31:0] instruction_by_program;
     
     // for controller_for_mips_opcode
     wire RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch;
@@ -63,13 +66,16 @@ module datapath(
     wire [31:0] read_data_from_memory;
     
     IF IF0(
-    .instruction(instruction),
+    .instruction(instruction_by_program),
     .PCadd4(PCadd4),
     .ALU_zero(ALU_zero), .Branch(Branch),
     .branched_address(branched_address),
     .cs(cs),
     .clk(clk), .rst(rst)
     );
+    
+    // select instruction
+    assign instruction = instruction_by_program;
         
     ID ID0(
         .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
@@ -121,27 +127,6 @@ module datapath(
         .ALU_result(ALU_result),.read_data_from_memory(read_data_from_memory),
         .MemtoReg(MemtoReg),
         .cs(cs),
-        .clk(clk), .rst(rst)
-        );
-        
-    // sseg for Debug
-    controller_for_debug controller_for_debug0(
-        .mask(mask),
-        .data7(data7), .data6(data6), .data5(data5), .data4(data4),
-        .data3(data3), .data2(data2), .data1(data1), .data0(data0),
-        .mode(mode),
-        // state (0)
-        .ns(ns), .cs(cs),
-        // instruction_fetch (1)
-        .instruction(instruction),
-        // controller_for_mips_opcode (2)
-        .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
-        .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
-        // Execution1 (4)
-        .ALU_operation(ALU_operation),
-        // Execution2 (5)
-        .ALU_result(ALU_result),
-        // clk and rst
         .clk(clk), .rst(rst)
         );
         
