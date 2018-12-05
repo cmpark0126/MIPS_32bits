@@ -38,10 +38,10 @@ module Instruction_fetch(
     
     // for debug
     wire [7:0] BRAM [0:15];
-    assign {BRAM[0], BRAM[1], BRAM[2], BRAM[3]} = 32'h2008_0005; // add $s1, $s2, $s3
-    assign {BRAM[4], BRAM[5], BRAM[6], BRAM[7]} = 32'h0100_4820; // lw $s1, 100($s2)
-    assign {BRAM[8], BRAM[9], BRAM[10], BRAM[11]} = 32'h0128_5020; // sw $s1, 100($s2)
-    assign {BRAM[12], BRAM[13], BRAM[14], BRAM[15]} = 32'h1000_0001; // 
+    assign {BRAM[0], BRAM[1], BRAM[2], BRAM[3]} = 32'h2008_0005; // ADDI $t0 $zero
+    assign {BRAM[4], BRAM[5], BRAM[6], BRAM[7]} = 32'h0100_4820; // ADD $t1 $t0 $zero
+    assign {BRAM[8], BRAM[9], BRAM[10], BRAM[11]} = 32'h0128_5020; // ADD $t2 $t1 $t0
+    assign {BRAM[12], BRAM[13], BRAM[14], BRAM[15]} = 32'h1000_0001; // BEQ zero zero 0x1
     
     reg [7:0] fetched_value [0:3];
     

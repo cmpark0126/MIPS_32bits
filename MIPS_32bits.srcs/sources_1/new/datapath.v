@@ -24,6 +24,16 @@ module datapath(
    // for debug
    output [7:0] mask,
    output [3:0] data7, data6, data5, data4, data3, data2, data1, data0,
+   // for register
+   output [31:0] zero,
+   output [31:0] at,
+   output [31:0] v0, v1,
+   output [31:0] a0, a1, a2, a3,
+   output [31:0] t0, t1, t2, t3, t4, t5, t6, t7,
+   output [31:0] s0, s1, s2, s3, s4, s5, s6, s7,
+   output [31:0] t8, t9,
+   output [31:0] k0, k1,
+   output [31:0] gp, sp, fp, ra,
    // for state
    input [3:0] cs, ns,
    input [3:0] mode,
@@ -68,6 +78,17 @@ module datapath(
         .extended(extended),
         .instruction(instruction),
         .write_data(write_data),
+        .zero(zero),
+        .at(at),
+        .v0(v0), .v1(v1), 
+        .a0(a0), .a1(a1), .a2(a2), .a3(a3),
+        .t0(t0), .t1(t1), .t2(t2), .t3(t3),
+        .t4(t4), .t5(t5), .t6(t6), .t7(t7),
+        .s0(s0), .s1(s1), .s2(s2), .s3(s3),
+        .s4(s4), .s5(s5), .s6(s6), .s7(s7),
+        .t8(t8), .t9(t9), 
+        .k0(k0), .k1(k1), 
+        .gp(gp), .sp(sp), .fp(fp), .ra(ra),
         .cs(cs),
         .clk(clk), .rst(rst)
     );
