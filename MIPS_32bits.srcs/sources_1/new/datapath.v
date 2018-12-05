@@ -52,7 +52,6 @@ module datapath(
     // for memory read
     wire [31:0] read_data_from_memory;
     
-    // IF
     IF IF0(
     .instruction(instruction),
     .PCadd4(PCadd4),
@@ -62,7 +61,6 @@ module datapath(
     .clk(clk), .rst(rst)
     );
         
-    // ID 
     ID ID0(
         .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
         .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
@@ -74,7 +72,6 @@ module datapath(
         .clk(clk), .rst(rst)
     );
     
-    // EX
     EX EX0(
         .ALU_result(ALU_result),
         .ALU_zero(ALU_zero),
@@ -89,7 +86,6 @@ module datapath(
         .clk(clk), .rst(rst)
     );
         
-    // Mem
     MEM MEM0(
         .read_data_from_memory(read_data_from_memory),
         .address_for_memory(ALU_result),
@@ -99,10 +95,12 @@ module datapath(
         .clk(clk), .rst(rst)
         );
     
-    Mux_32bits select_write_data(
-        .out(write_data),
-        .in0(ALU_result),.in1(read_data_from_memory),
-        .sel(MemtoReg)
+    WB WB0(
+        .write_data(write_data),
+        .ALU_result(ALU_result),.read_data_from_memory(read_data_from_memory),
+        .MemtoReg(MemtoReg),
+        .cs(cs),
+        .clk(clk), .rst(rst)
         );
         
     // sseg for Debug
