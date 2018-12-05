@@ -32,7 +32,7 @@ module controller_for_debug(
     input RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch,
     input [1:0] ALUOp,
     // Register (3)
-    input [4:0] write_reg,
+//    input [4:0] write_reg,
     // Executio1 (4)
     input [3:0] ALU_operation,
     // Execution2 (5)
@@ -68,13 +68,13 @@ module controller_for_debug(
                     data1 = {3'b000, Branch};
                     data0 = {2'b00, ALUOp};
                     end
-                4'd3 : begin
-                    mask = 8'b1111_1111;
-                    {data7, data6} = {3'b000, instruction[25:21]};
-                    {data5, data4} = {3'b000, instruction[20:16]};
-                    {data3, data2} = {3'b000, instruction[15:11]};
-                    {data1, data0} = {3'b000, write_reg};
-                    end
+//                4'd3 : begin
+//                    mask = 8'b1111_1111;
+//                    {data7, data6} = {3'b000, instruction[25:21]};
+//                    {data5, data4} = {3'b000, instruction[20:16]};
+//                    {data3, data2} = {3'b000, instruction[15:11]};
+//                    {data1, data0} = {3'b000, write_reg};
+//                    end
                 4'd4 : begin
                     mask = 8'b0000_1111;
                     data3 = ALU_operation[3];
