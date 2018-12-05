@@ -53,7 +53,7 @@ module top(
     
     // for instruction
     wire [31:0] instruction;
-    wire [31:0] instruction_by_user;
+    reg [31:0] instruction_by_user;
     
     // for controller_for_debug
     wire [7:0] mask;
@@ -62,6 +62,7 @@ module top(
     // for keyboard input
     wire [7:0] scancode;
     wire err_ind;
+    wire shift_done;
     
     clk_wiz_0 clk_core(
       // Clock in ports
@@ -118,7 +119,25 @@ module top(
         .err_ind(err_ind)
         );
     
-    assign instruction_by_user[7:0] = scancode;
+    
+    always@(negedge Released) begin
+        if(scancode == 'h41 || scancode == 'h61) // 'A' or 'a'
+            instruction_by_user <= {instruction_by_user[27:0], 4'hA};
+        else if(scancode == 'h42 || scancode == 'h62) // 'B' or 'b'
+            instruction_by_user <= {instruction_by_user[27:0], 4'hB};
+        else if(scancode == 'h43 || scancode == 'h63) // 'C' or 'c'
+            instruction_by_user <= {instruction_by_user[27:0], 4'hC};
+        else if(scancode == 'h44 || scancode == 'h64) // 'D' or 'd'
+            instruction_by_user <= {instruction_by_user[27:0], 4'hD};
+        else if(scancode == 'h45 || scancode == 'h65) // 'E' or 'e'
+            instruction_by_user <= {instruction_by_user[27:0], 4'hE};
+        else if(scancode == 'h46 || scancode == 'h66) // 'F' or 'f'
+            instruction_by_user <= {instruction_by_user[27:0], 4'hF};
+        else if(scancode == 'h08) // BACKSPACE
+            instruction_by_user <= {4'b0000, instruction_by_user[31:4]};
+        else
+            instruction_by_user <= instruction_by_user;
+    end
     
     // sseg for Debug
     controller_for_debug controller_for_debug0(
