@@ -90,12 +90,12 @@ module datapath(
     );
         
     // Mem
-    Memory_access Memory_access0(
+    MEM MEM0(
         .read_data_from_memory(read_data_from_memory),
         .address_for_memory(ALU_result),
         .write_data_for_memory(read_data2),
-        .cs(cs),
         .MemRead(MemRead), .MemWrite(MemWrite),
+        .cs(cs),
         .clk(clk), .rst(rst)
         );
     
