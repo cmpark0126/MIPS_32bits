@@ -24,12 +24,17 @@
 module top(
     output [6:0] sseg,
     output DP,
-    output [7:0]AN,
-    input clk, rst,
-    input mode
+    output [7:0] AN,
+    output Released,
+    input ps2clk,
+    input ps2data,
+    input mode,
+    input clk, rst
     );
     
     // for clk division
+    wire clk_50;
+    wire clk_100;
     wire n_clk;
     
     // for state
@@ -53,6 +58,21 @@ module top(
     // for controller_for_debug
     wire [7:0] mask;
     wire [3:0] data7, data6, data5, data4, data3, data2, data1, data0;
+    
+    // for keyboard input
+    wire [7:0] scancode;
+    wire err_ind;
+    
+    clk_wiz_0 clk_core(
+      // Clock in ports
+       .clk_in1(clk),      // input clk_in1
+       // Clock out ports
+       .clk_out1(clk_100),     // output clk_out1
+       .clk_out2(clk_50),     // output clk_out2
+       // Status and control signals
+       .reset(rst), // input reset
+       .locked()
+       );      // output locked
     
     clk_div clk_div0(
        .en_out(n_clk),
@@ -87,6 +107,19 @@ module top(
       .clk(n_clk), .rst(rst)
     );
     
+    // keyboard input
+    ps2_kbd_top ps2_kbd (
+        .clk(clk_50), 
+        .rst(rst), 
+        .ps2clk(ps2clk), 
+        .ps2data(ps2data), 
+        .scancode(scancode), 
+        .Released(Released), 
+        .err_ind(err_ind)
+        );
+    
+    assign instruction_by_user[7:0] = scancode;
+    
     // sseg for Debug
     controller_for_debug controller_for_debug0(
         .mask(mask),
@@ -95,6 +128,8 @@ module top(
         .mode(mode),
         // instruction_fetch (0)
         .instruction(instruction),
+        // interpreter input (1)
+        .instruction_by_user(instruction_by_user),
         // clk and rst
         .clk(clk), .rst(rst)
         );

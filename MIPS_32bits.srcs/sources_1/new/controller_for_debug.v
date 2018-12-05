@@ -23,9 +23,11 @@
 module controller_for_debug(
     output reg [7:0] mask,
     output reg [3:0] data7, data6, data5, data4, data3, data2, data1, data0,
-    input [3:0] mode,
+    input mode,
     // instruction_fetch (0)
     input [31:0] instruction,
+    // interpreter input (1)
+    input [31:0] instruction_by_user,
     // clk and rst
     input clk, rst
     );
@@ -40,6 +42,10 @@ module controller_for_debug(
                 4'd0 : begin
                     mask = 8'b1111_1111;
                     {data7, data6, data5, data4, data3, data2, data1, data0} = instruction;
+                    end
+                4'd1 : begin
+                    mask = 8'b1111_1111;
+                    {data7, data6, data5, data4, data3, data2, data1, data0} = instruction_by_user;
                     end
                 default : begin
                     mask = 8'b0000_0000;
