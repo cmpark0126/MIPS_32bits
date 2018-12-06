@@ -181,6 +181,7 @@ module top(
                 resume = 0; 
             end
             else if(scancode == 'h52 || scancode == 'h72) begin // 'R' or 'r' : resume
+                instruction_by_user = 'd0;
                 start = 0;
                 resume = 1; 
             end
