@@ -1,6 +1,18 @@
 # MIPS_32bits
 Implements 32bits MIPS with verilog. (18.11.25 ~)
 
-# How to use
-1. start_signal switch on (J15)
-2. state code change every 1's
+# supported instruction set
+add, addi, sub, and, or, slt, lw, sw, beq, j
+
+# Mode
+0 > Inner Program running
+1 > MIPS Interpreter mode
+
+# sseg_mode
+0 > current instruction
+1 > register value
+
+# keybord
+1-9, a-f > for hex input (instruction used by interpreter mode)
+s : start > start inner program or interpreter
+r : resume > back to INIT state (when interpreter)
