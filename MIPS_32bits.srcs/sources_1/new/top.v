@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`define DIVISOR 10000000
+`define DIVISOR 100000000
 
 module top(
     output [6:0] sseg,
@@ -40,7 +40,7 @@ module top(
     
     // for state
     wire [3:0] cs, ns;
-    wire start, resume;
+    reg start, resume;
     
     // for register name
     wire [31:0] zero;
@@ -123,12 +123,20 @@ module top(
         );
     
     always@(negedge Released) begin
+        instruction_by_user = instruction_by_user;
+        start = 0;
+        resume = 0;
+        
         if (mode == 0) begin
-            if(scancode == 'h00) // ENTER : start
-                instruction_by_user = instruction_by_user;
-            else if(scancode == 'h52) // 'R' or 'r' : resume
-                instruction_by_user = instruction_by_user;
+            if(scancode == 'h53 || scancode == 'h73) begin // 'S' or 's' : start // we need to ack about starting program successfully!
+                start = 1;
+                resume = 0; 
             end
+            else if(scancode == 'h52 || scancode == 'h72) begin// 'R' or 'r' : resume
+                start = 0;
+                resume = 1; 
+            end
+        end
         else begin
             if(scancode == 'h30) // 0
                 instruction_by_user = {instruction_by_user[27:0], 4'h0};
@@ -164,12 +172,15 @@ module top(
                 instruction_by_user = {instruction_by_user[27:0], 4'hF};
             else if(scancode == 'h08) // BACKSPACE
                 instruction_by_user = {4'b0000, instruction_by_user[31:4]};
-            else if(scancode == 'h00) // ENTER : start
-                instruction_by_user = instruction_by_user;
-            else if(scancode == 'h52) // 'R' or 'r' : resume
-                instruction_by_user = instruction_by_user;
-            else
-                instruction_by_user = instruction_by_user;
+            else if(scancode == 'h53 || scancode == 'h73) begin// 'S' or 's' : start
+                start = 1;
+                resume = 0; 
+            end
+            else if(scancode == 'h52 || scancode == 'h72) begin // 'R' or 'r' : resume
+                instruction_by_user = 32'h0000_0000;
+                start = 0;
+                resume = 1; 
+            end
         end
     end
     

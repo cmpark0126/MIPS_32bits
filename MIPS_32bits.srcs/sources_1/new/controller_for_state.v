@@ -45,16 +45,16 @@ module controller_for_state(
     always @ (*) begin
         if(mode == 0) begin
             case(cs)
-                INIT : ns = INIT; // when interpreter in here
-                END : ns = END; // when program is end
+                INIT : ns = (start)? IF : INIT; // when interpreter in here
+                END : ns = (resume)? INIT : END; // when program is end
                 WB : ns = IF;
                 default : ns = (cs + 1); 
             endcase
         end
         else begin
             case(cs)
-                INIT : ns = INIT; // when interpreter in here
-                END : ns = END; // when program is end
+                INIT : ns = (start)? IF : INIT; // when interpreter in here
+                END : ns = (resume)? INIT : END; // when program is end
                 WB : ns = INIT; // only one instruction going on
                 default : ns = (cs + 1); 
             endcase
