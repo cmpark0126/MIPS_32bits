@@ -52,7 +52,7 @@ module ALU(
                 ADD: temp <= (in0 + in1);
                 SUB: temp <= (in0 - in1);
                 SET_ON_LESS_THAN: temp <= 0;
-                NOR: temp <= (in0 | in1) ^ 32'hFFFF_FFFF;
+                NOR: temp <= ~(in0 | in1);
                 default: temp <= 0;
             endcase
         else 
