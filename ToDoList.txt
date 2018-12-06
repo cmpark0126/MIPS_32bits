@@ -9,5 +9,6 @@
 #6 Implement uart                 :
 #7 Implement sseg                 : V
 #8 Implement vga                  :
+#9 Implement Keyboard interface   : V
 
 // Instruction                    : V : 10 instruction
