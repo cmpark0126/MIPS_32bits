@@ -39,7 +39,7 @@ module datapath(
    // for state
    input [31:0] instruction_by_user,
    input [3:0] cs, ns,
-   input [3:0] mode,
+   input [1:0] mode,
    input clk, rst
     );
     

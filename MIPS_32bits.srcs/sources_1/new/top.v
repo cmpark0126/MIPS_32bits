@@ -28,7 +28,8 @@ module top(
     output Released,
     input ps2clk,
     input ps2data,
-    input mode,
+    input [1:0] mode,
+    input [4:0] register_number,
     input clk, rst
     );
     
@@ -167,6 +168,19 @@ module top(
         .instruction(instruction),
         // interpreter input (1)
         .instruction_by_user(instruction_by_user),
+        // register set monitor (2)
+        .register_number(register_number),
+        .zero(zero),
+        .at(at),
+        .v0(v0), .v1(v1), 
+        .a0(a0), .a1(a1), .a2(a2), .a3(a3),
+        .t0(t0), .t1(t1), .t2(t2), .t3(t3),
+        .t4(t4), .t5(t5), .t6(t6), .t7(t7),
+        .s0(s0), .s1(s1), .s2(s2), .s3(s3),
+        .s4(s4), .s5(s5), .s6(s6), .s7(s7),
+        .t8(t8), .t9(t9), 
+        .k0(k0), .k1(k1), 
+        .gp(gp), .sp(sp), .fp(fp), .ra(ra),
         // clk and rst
         .clk(clk), .rst(rst)
         );
