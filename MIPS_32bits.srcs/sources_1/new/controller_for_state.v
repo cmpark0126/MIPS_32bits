@@ -22,7 +22,7 @@
 
 module controller_for_state(
     output reg [3:0] cs, ns,
-    input [1:0] mode,
+    input mode,
     input start, resume,
     input clk, rst
     );
@@ -43,7 +43,7 @@ module controller_for_state(
     end
     
     always @ (*) begin
-        if(mode == 0) begin
+        if(mode == 'd0) begin
             case(cs)
                 INIT : ns = (start)? IF : INIT; // when interpreter in here
                 END : ns = (resume)? INIT : END; // when program is end

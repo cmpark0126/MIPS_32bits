@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`define DIVISOR 100000000
+`define DIVISOR 10000000
 
 module top(
     output [6:0] sseg,
@@ -28,7 +28,8 @@ module top(
     output Released,
     input ps2clk,
     input ps2data,
-    input [1:0] mode,
+    input mode,
+    input sseg_mode,
     input [4:0] register_number,
     input clk, rst
     );
@@ -127,7 +128,7 @@ module top(
         start = 0;
         resume = 0;
         
-        if (mode == 0) begin
+        if (mode == 'd0) begin
             if(scancode == 'h53 || scancode == 'h73) begin // 'S' or 's' : start // we need to ack about starting program successfully!
                 start = 1;
                 resume = 0; 
@@ -189,12 +190,10 @@ module top(
         .mask(mask),
         .data7(data7), .data6(data6), .data5(data5), .data4(data4),
         .data3(data3), .data2(data2), .data1(data1), .data0(data0),
-        .mode(mode),
+        .sseg_mode(sseg_mode),
         // instruction_fetch (0)
         .instruction(instruction),
-        // interpreter input (1)
-        .instruction_by_user(instruction_by_user),
-        // register set monitor (2)
+        // register set monitor (1)
         .register_number(register_number),
         .zero(zero),
         .at(at),

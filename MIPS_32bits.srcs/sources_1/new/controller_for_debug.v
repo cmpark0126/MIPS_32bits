@@ -23,12 +23,10 @@
 module controller_for_debug(
     output reg [7:0] mask,
     output reg [3:0] data7, data6, data5, data4, data3, data2, data1, data0,
-    input [1:0] mode,
+    input sseg_mode,
     // instruction_fetch (0)
     input [31:0] instruction,
-    // interpreter input (1)
-    input [31:0] instruction_by_user,
-    // register set monitor(2)
+    // register set monitor(1)
     input [4:0] register_number,
     input [31:0] zero,
     input [31:0] at,
@@ -49,16 +47,12 @@ module controller_for_debug(
             {data7, data6, data5, data4, data3, data2, data1, data0} = 32'd0;
         end
         else begin
-            case(mode)
-                2'd0 : begin
+            case(sseg_mode)
+                'd0 : begin
                     mask = 8'b1111_1111;
                     {data7, data6, data5, data4, data3, data2, data1, data0} = instruction;
                     end
-                2'd1 : begin
-                    mask = 8'b1111_1111;
-                    {data7, data6, data5, data4, data3, data2, data1, data0} = instruction_by_user;
-                    end
-                2'd2 : begin
+                'd1 : begin
                     case(register_number)
                         5'd0 : {data7, data6, data5, data4, data3, data2, data1, data0} = zero;
                         5'd1 : {data7, data6, data5, data4, data3, data2, data1, data0} = at;

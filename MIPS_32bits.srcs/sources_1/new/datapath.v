@@ -39,7 +39,7 @@ module datapath(
    // for state
    input [31:0] instruction_by_user,
    input [3:0] cs, ns,
-   input [1:0] mode,
+   input mode,
    input clk, rst
     );
     
@@ -75,7 +75,7 @@ module datapath(
     );
     
     // select instruction
-    assign instruction = instruction_by_program;
+    assign instruction = (mode == 'd0)? instruction_by_program : instruction_by_user;
         
     ID ID0(
         .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
