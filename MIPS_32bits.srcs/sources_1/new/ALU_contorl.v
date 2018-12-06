@@ -45,11 +45,12 @@ module ALU_contorl(
             2'bx1: ALU_operation = SUB;
             2'b1x: begin
                 casex(Function_field)
-                   6'bxx0000: ALU_operation = ADD;
-                   6'bxx0010: ALU_operation = SUB;
                    6'bxx0100: ALU_operation = AND;
                    6'bxx0101: ALU_operation = OR;
+                   6'bxx0000: ALU_operation = ADD;
+                   6'bxx0010: ALU_operation = SUB;
                    6'bxx1010: ALU_operation = SET_ON_LESS_THAN;
+                   6'b100111: ALU_operation = NOR;
                    6'b001100: begin syscall_inst = (v0 == 'd10)? 'b1 : 'b0; end
                    default: ALU_operation = UNKNOWN;
                 endcase
