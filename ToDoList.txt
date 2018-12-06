@@ -1,11 +1,13 @@
 #0 state change check code        : V (complete)
-#1 Implement Instruction fetch    : V
-#2 Implement Instruction decode   :
-#3 implement Execution            :
-#4 Implement Data access          :
-#5 Implement Write-back           :
+#1 Implement Instruction fetch    : V (partially)
+#2 Implement Instruction decode   : V
+#3 implement Execution            : V
+#4 Implement Data access          : V (partially)
+#5 Implement Write-back           : V
 
 // Interface
 #6 Implement uart                 :
-#7 Implement sseg                 :
+#7 Implement sseg                 : V
 #8 Implement vga                  :
+
+// Instruction                    : V : 10 instruction
