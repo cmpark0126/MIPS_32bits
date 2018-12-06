@@ -25,11 +25,14 @@ module EX(
     output ALU_zero,
     output [3:0] ALU_operation,
     output [31:0] branched_address,
+    output syscall_inst,
     input [31:0] instruction,
     input [31:0] extended,
     input [31:0] PCadd4,
     input [31:0] read_data1, read_data2,
-    input ALUSrc, ALUOp,
+    input ALUSrc, 
+    input [1:0] ALUOp,
+    input [31:0] v0,
     input [3:0] cs,
     input clk, rst 
     );
@@ -57,8 +60,10 @@ module EX(
     
     ALU_contorl ALU_contorl0(
         .ALU_operation(ALU_operation),
+        .syscall_inst(syscall_inst),
         .Function_field(instruction[5:0]),
-        .ALUOp(ALUOp)
+        .ALUOp(ALUOp),
+        .v0(v0)
         );
     
     ALU ALU0(

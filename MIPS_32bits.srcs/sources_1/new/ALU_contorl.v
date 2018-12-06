@@ -22,8 +22,10 @@
 
 module ALU_contorl(
     output reg [3:0] ALU_operation,
+    output reg syscall_inst,
     input [5:0] Function_field,
-    input [1:0] ALUOp
+    input [1:0] ALUOp,
+    input [31:0] v0
     );
     
     parameter AND = 4'b0000;
@@ -35,6 +37,9 @@ module ALU_contorl(
     parameter UNKNOWN = 4'b1111;
     
     always @ * begin
+        ALU_operation = UNKNOWN;
+        syscall_inst = 'b0;
+        
         casex(ALUOp)
             2'b00: ALU_operation = ADD;
             2'bx1: ALU_operation = SUB;
@@ -45,6 +50,7 @@ module ALU_contorl(
                    6'bxx0100: ALU_operation = AND;
                    6'bxx0101: ALU_operation = OR;
                    6'bxx1010: ALU_operation = SET_ON_LESS_THAN;
+                   6'b001100: begin syscall_inst = (v0 == 'd10)? 'b1 : 'b0; end
                    default: ALU_operation = UNKNOWN;
                 endcase
             end

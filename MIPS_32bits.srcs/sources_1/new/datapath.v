@@ -37,6 +37,7 @@ module datapath(
    // instruction check
    output [31:0] instruction,
    // for state
+   output syscall_inst,
    input [31:0] instruction_by_user,
    input [3:0] cs, ns,
    input mode,
@@ -104,11 +105,13 @@ module datapath(
         .ALU_zero(ALU_zero),
         .ALU_operation(ALU_operation),
         .branched_address(branched_address),
+        .syscall_inst(syscall_inst),
         .instruction(instruction),
         .extended(extended),
         .PCadd4(PCadd4),
         .read_data1(read_data1),.read_data2(read_data2),
         .ALUSrc(ALUSrc), .ALUOp(ALUOp),
+        .v0(v0),
         .cs(cs),
         .clk(clk), .rst(rst)
     );

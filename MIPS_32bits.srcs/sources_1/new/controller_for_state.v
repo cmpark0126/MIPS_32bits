@@ -24,6 +24,7 @@ module controller_for_state(
     output reg [3:0] cs, ns,
     input mode,
     input start, resume,
+    input syscall_inst,
     input clk, rst
     );
     
@@ -46,9 +47,9 @@ module controller_for_state(
         if(mode == 'd0) begin
             case(cs)
                 INIT : ns = (start)? IF : INIT; // when interpreter in here
-                END : ns = (resume)? INIT : END; // when program is end
-                WB : ns = IF; // When some context is clear, go to END
-                default : ns = (cs + 1); // When some context is clear, go to END
+                END : ns = END; // when program is end
+                WB : ns = (syscall_inst)? END : IF; // When some context is clear, go to END
+                default : ns = (syscall_inst)? END : (cs + 1); // When some context is clear, go to END
             endcase
         end
         else begin

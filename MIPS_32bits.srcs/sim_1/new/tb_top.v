@@ -32,7 +32,7 @@ module tb_top();
         .DP(DP),
         .AN(AN),
         .clk(clk), .rst(rst),
-        .mode(mode), .register_number(),
+        .mode(mode[0]), .sseg_mode(mode[1]), .register_number(),
         .Released(), .ps2clk(), .ps2data()
         );
         

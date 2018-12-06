@@ -42,6 +42,7 @@ module top(
     // for state
     wire [3:0] cs, ns;
     reg start, resume;
+    wire syscall_inst;
     
     // for register name
     wire [31:0] zero;
@@ -87,6 +88,7 @@ module top(
         .cs(cs), .ns(ns),
         .mode(mode),
         .start(start), .resume(resume),
+        .syscall_inst(syscall_inst),
         .clk(n_clk), .rst(rst)
         );
         
@@ -106,6 +108,7 @@ module top(
       .k0(k0), .k1(k1), 
       .gp(gp), .sp(sp), .fp(fp), .ra(ra),
       .instruction(instruction),
+      .syscall_inst(syscall_inst),
       .instruction_by_user(instruction_by_user),
       .cs(cs), .ns(ns),
       .mode(mode),
