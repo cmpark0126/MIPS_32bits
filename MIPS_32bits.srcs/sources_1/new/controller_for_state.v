@@ -22,6 +22,7 @@
 
 module controller_for_state(
     output reg [3:0] cs, ns,
+    input [1:0] mode,
     input clk, rst
     );
     
@@ -30,20 +31,33 @@ module controller_for_state(
     parameter EX  = 4'd2;
     parameter MEM = 4'd3;
     parameter WB  = 4'd4;
+    parameter INIT = 4'd5;
+    parameter END  = 4'd6; 
     
     always @ (negedge clk or posedge rst) begin
         if(rst)
-            cs <= IF;
-            // Do we need to reset 'ns' also?
+            cs <= INIT;
         else
             cs <= ns;
     end
     
     always @ (*) begin
-        case(cs)
-            WB : ns = IF;
-            default : ns = (cs + 1); 
-        endcase
+        if(mode == 0) begin
+            case(cs)
+                INIT : ns = INIT; // when interpreter in here
+                END : ns = END; // when program is end
+                WB : ns = IF;
+                default : ns = (cs + 1); 
+            endcase
+        end
+        else begin
+            case(cs)
+                INIT : ns = INIT; // when interpreter in here
+                END : ns = INIT; // when program is end
+                WB : ns = INIT; // only one instruction going on
+                default : ns = (cs + 1); 
+            endcase
+        end
     end
     
 endmodule

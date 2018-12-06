@@ -83,6 +83,7 @@ module top(
     
     controller_for_state controller_for_state0(
         .cs(cs), .ns(ns),
+        .mode(mode),
         .clk(n_clk), .rst(rst)
         );
         

@@ -24,18 +24,22 @@ module tb_top();
     wire [6:0] sseg;
     wire DP;
     wire [7:0]AN;
-    reg clk, start_signal;
+    reg [1:0] mode;
+    reg clk, rst;
     
     top t0(
         .sseg(sseg),
         .DP(DP),
         .AN(AN),
-        .clk(clk), .start_signal(start_signal)
+        .clk(clk), .rst(rst),
+        .mode(mode), .register_number(),
+        .Released(), .ps2clk(), .ps2data()
         );
         
    initial begin
-        start_signal = 0;
-        #10 start_signal = 1;
+        rst = 1;
+        mode = 0;
+        #10 rst = 0;
     end
     
     initial begin
