@@ -40,6 +40,7 @@ module top(
     
     // for state
     wire [3:0] cs, ns;
+    wire start, resume;
     
     // for register name
     wire [31:0] zero;
@@ -84,6 +85,7 @@ module top(
     controller_for_state controller_for_state0(
         .cs(cs), .ns(ns),
         .mode(mode),
+        .start(start), .resume(resume),
         .clk(n_clk), .rst(rst)
         );
         
@@ -121,42 +123,54 @@ module top(
         );
     
     always@(negedge Released) begin
-        if(scancode == 'h30) // 0
-            instruction_by_user <= {instruction_by_user[27:0], 4'h0};
-        else if(scancode == 'h31) // 1
-            instruction_by_user <= {instruction_by_user[27:0], 4'h1};
-        else if(scancode == 'h32) // 2
-            instruction_by_user <= {instruction_by_user[27:0], 4'h2};
-        else if(scancode == 'h33) // 3
-            instruction_by_user <= {instruction_by_user[27:0], 4'h3};
-        else if(scancode == 'h34) // 4
-            instruction_by_user <= {instruction_by_user[27:0], 4'h4};
-        else if(scancode == 'h35) // 5
-            instruction_by_user <= {instruction_by_user[27:0], 4'h5};
-        else if(scancode == 'h36) // 6
-            instruction_by_user <= {instruction_by_user[27:0], 4'h6};
-        else if(scancode == 'h37) // 7
-            instruction_by_user <= {instruction_by_user[27:0], 4'h7};
-        else if(scancode == 'h38) // 8
-            instruction_by_user <= {instruction_by_user[27:0], 4'h8};
-        else if(scancode == 'h39) // 9
-            instruction_by_user <= {instruction_by_user[27:0], 4'h9};
-        else if(scancode == 'h41 || scancode == 'h61) // 'A' or 'a'
-            instruction_by_user <= {instruction_by_user[27:0], 4'hA};
-        else if(scancode == 'h42 || scancode == 'h62) // 'B' or 'b'
-            instruction_by_user <= {instruction_by_user[27:0], 4'hB};
-        else if(scancode == 'h43 || scancode == 'h63) // 'C' or 'c'
-            instruction_by_user <= {instruction_by_user[27:0], 4'hC};
-        else if(scancode == 'h44 || scancode == 'h64) // 'D' or 'd'
-            instruction_by_user <= {instruction_by_user[27:0], 4'hD};
-        else if(scancode == 'h45 || scancode == 'h65) // 'E' or 'e'
-            instruction_by_user <= {instruction_by_user[27:0], 4'hE};
-        else if(scancode == 'h46 || scancode == 'h66) // 'F' or 'f'
-            instruction_by_user <= {instruction_by_user[27:0], 4'hF};
-        else if(scancode == 'h08) // BACKSPACE
-            instruction_by_user <= {4'b0000, instruction_by_user[31:4]};
-        else
-            instruction_by_user <= instruction_by_user;
+        if (mode == 0) begin
+            if(scancode == 'h00) // ENTER : start
+                instruction_by_user = instruction_by_user;
+            else if(scancode == 'h52) // 'R' or 'r' : resume
+                instruction_by_user = instruction_by_user;
+            end
+        else begin
+            if(scancode == 'h30) // 0
+                instruction_by_user = {instruction_by_user[27:0], 4'h0};
+            else if(scancode == 'h31) // 1
+                instruction_by_user = {instruction_by_user[27:0], 4'h1};
+            else if(scancode == 'h32) // 2
+                instruction_by_user = {instruction_by_user[27:0], 4'h2};
+            else if(scancode == 'h33) // 3
+                instruction_by_user = {instruction_by_user[27:0], 4'h3};
+            else if(scancode == 'h34) // 4
+                instruction_by_user = {instruction_by_user[27:0], 4'h4};
+            else if(scancode == 'h35) // 5
+                instruction_by_user = {instruction_by_user[27:0], 4'h5};
+            else if(scancode == 'h36) // 6
+                instruction_by_user = {instruction_by_user[27:0], 4'h6};
+            else if(scancode == 'h37) // 7
+                instruction_by_user = {instruction_by_user[27:0], 4'h7};
+            else if(scancode == 'h38) // 8
+                instruction_by_user = {instruction_by_user[27:0], 4'h8};
+            else if(scancode == 'h39) // 9
+                instruction_by_user = {instruction_by_user[27:0], 4'h9};
+            else if(scancode == 'h41 || scancode == 'h61) // 'A' or 'a'
+                instruction_by_user = {instruction_by_user[27:0], 4'hA};
+            else if(scancode == 'h42 || scancode == 'h62) // 'B' or 'b'
+                instruction_by_user = {instruction_by_user[27:0], 4'hB};
+            else if(scancode == 'h43 || scancode == 'h63) // 'C' or 'c'
+                instruction_by_user = {instruction_by_user[27:0], 4'hC};
+            else if(scancode == 'h44 || scancode == 'h64) // 'D' or 'd'
+                instruction_by_user = {instruction_by_user[27:0], 4'hD};
+            else if(scancode == 'h45 || scancode == 'h65) // 'E' or 'e'
+                instruction_by_user = {instruction_by_user[27:0], 4'hE};
+            else if(scancode == 'h46 || scancode == 'h66) // 'F' or 'f'
+                instruction_by_user = {instruction_by_user[27:0], 4'hF};
+            else if(scancode == 'h08) // BACKSPACE
+                instruction_by_user = {4'b0000, instruction_by_user[31:4]};
+            else if(scancode == 'h00) // ENTER : start
+                instruction_by_user = instruction_by_user;
+            else if(scancode == 'h52) // 'R' or 'r' : resume
+                instruction_by_user = instruction_by_user;
+            else
+                instruction_by_user = instruction_by_user;
+        end
     end
     
     // sseg for Debug

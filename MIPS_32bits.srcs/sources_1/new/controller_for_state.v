@@ -23,6 +23,7 @@
 module controller_for_state(
     output reg [3:0] cs, ns,
     input [1:0] mode,
+    input start, resume,
     input clk, rst
     );
     
@@ -53,7 +54,7 @@ module controller_for_state(
         else begin
             case(cs)
                 INIT : ns = INIT; // when interpreter in here
-                END : ns = INIT; // when program is end
+                END : ns = END; // when program is end
                 WB : ns = INIT; // only one instruction going on
                 default : ns = (cs + 1); 
             endcase
