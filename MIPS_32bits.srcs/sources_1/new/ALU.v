@@ -47,8 +47,12 @@ module ALU(
         end
         else if(cs == EX)
             case(ALU_operation)
+                AND: temp <= (in0 & in1);
+                OR: temp <= (in0 | in1);
                 ADD: temp <= (in0 + in1);
                 SUB: temp <= (in0 - in1);
+                SET_ON_LESS_THAN: temp <= 0;
+                NOR: temp <= 0;
                 default: temp <= 0;
             endcase
         else 
@@ -62,6 +66,14 @@ module ALU(
         end
         else if(cs == EX) 
             case(ALU_operation)
+                AND: begin 
+                    ALU_result <= temp; 
+                    ALU_zero <= 0; 
+                    end
+                OR: begin 
+                    ALU_result <= temp; 
+                    ALU_zero <= 0; 
+                    end
                 ADD: begin 
                     ALU_result <= temp; 
                     ALU_zero <= 0; 
@@ -69,6 +81,14 @@ module ALU(
                 SUB: begin 
                     ALU_result <= temp; 
                     ALU_zero <= (temp == 32'd0)? 1:0; 
+                    end
+                SET_ON_LESS_THAN: begin 
+                    ALU_result <= 0; 
+                    ALU_zero <= 0; 
+                    end
+                NOR: begin 
+                    ALU_result <= 0; 
+                    ALU_zero <= 0; 
                     end
                 default: begin
                     ALU_result <= 0;
