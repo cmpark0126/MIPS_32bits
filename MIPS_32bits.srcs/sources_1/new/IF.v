@@ -23,21 +23,28 @@
 module IF(
     output [31:0] instruction,
     output [31:0] PCadd4,
-    input ALU_zero, Branch,
+    input ALU_zero, Branch, Jump,
     input [31:0] branched_address,
+    input [31:0] jumped_address,
     input [3:0] cs,
     input clk, rst 
     );
     
-    wire [31:0] PC; 
+    wire [31:0] PC_Before, PC; 
     wire PC_selector;
     
     assign PC_selector = ALU_zero & Branch;
 
-    Mux_32bits select_next_pc(
-        .out(PC),
+    Mux_32bits select_pc_before(
+        .out(PC_Before),
         .in0(PCadd4),.in1(branched_address),
         .sel(PC_selector) // it will be branch, ALU-zero (and gate)
+        );
+        
+    Mux_32bits select_next_pc(
+        .out(PC),
+        .in0(PC_Before),.in1(jumped_address),
+        .sel(Jump) //
         );
     
     Instruction_fetch Instruction_fetch0(

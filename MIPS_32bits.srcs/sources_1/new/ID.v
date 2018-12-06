@@ -29,6 +29,8 @@ module ID(
     output MemWrite,
     output Branch,
     output [1:0] ALUOp,
+    output Jump,
+    output [31:0] jumped_address,
     output [31:0] read_data1, read_data2,
     output [31:0] extended,
     // for register
@@ -43,6 +45,7 @@ module ID(
     output [31:0] gp, sp, fp, ra,
     input [31:0] instruction,
     input [31:0] write_data,
+    input [3:0] PCadd4_header,
     input [3:0] cs,
     input clk, rst 
     );
@@ -51,7 +54,7 @@ module ID(
     
     controller_for_mips_opcode controller_for_mips_opcode0(
             .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
-            .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
+            .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp), .JUMP(Jump),
             .opcode(instruction[31:26])
             );
             
@@ -84,5 +87,12 @@ module ID(
         Sign_extend_16to32bits Sign_extend_16to32bits0(
             .out(extended),
             .in(instruction[15:0])
+            );
+        
+        Calculate_jumped_address Calculate_jumped_address0(
+            .jumped_address(jumped_address),
+            .value_from_instruction(instruction[25:0]),
+            .PCadd4_header(PCadd4_header)
         );
+       
 endmodule

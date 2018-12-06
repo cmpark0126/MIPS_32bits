@@ -49,8 +49,9 @@ module datapath(
     wire [31:0] instruction_by_program;
     
     // for controller_for_mips_opcode
-    wire RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch;
+    wire RegDst, ALUSrc, MemtoReg, RegWrite, MemRead, MemWrite, Branch, Jump;
     wire [1:0] ALUOp;
+    wire [31:0] jumped_address;
      
     //for Register (ID, WB)
     wire [31:0] read_data1, read_data2;
@@ -69,8 +70,9 @@ module datapath(
     IF IF0(
     .instruction(instruction_by_program),
     .PCadd4(PCadd4),
-    .ALU_zero(ALU_zero), .Branch(Branch),
+    .ALU_zero(ALU_zero), .Branch(Branch), .Jump(Jump),
     .branched_address(branched_address),
+    .jumped_address(jumped_address),
     .cs(cs),
     .clk(clk), .rst(rst)
     );
@@ -80,11 +82,13 @@ module datapath(
         
     ID ID0(
         .RegDst(RegDst), .ALUSrc(ALUSrc), .MemtoReg(MemtoReg), .RegWrite(RegWrite), 
-        .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp),
+        .MemRead(MemRead), .MemWrite(MemWrite), .Branch(Branch), .ALUOp(ALUOp), .Jump(Jump),
+        .jumped_address(jumped_address),
         .read_data1(read_data1),.read_data2(read_data2),
         .extended(extended),
         .instruction(instruction),
         .write_data(write_data),
+        .PCadd4_header(PCadd4[31:28]),
         .zero(zero),
         .at(at),
         .v0(v0), .v1(v1), 
