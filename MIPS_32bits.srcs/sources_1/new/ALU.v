@@ -51,7 +51,7 @@ module ALU(
                 OR: temp <= (in0 | in1);
                 ADD: temp <= (in0 + in1);
                 SUB: temp <= (in0 - in1);
-                SET_ON_LESS_THAN: temp <= 0;
+                SET_ON_LESS_THAN: temp <= (in0 < in1)? 1 : 0;
                 NOR: temp <= ~(in0 | in1);
                 default: temp <= 0;
             endcase
@@ -83,7 +83,7 @@ module ALU(
                     ALU_zero <= (temp == 32'd0)? 1:0; 
                     end
                 SET_ON_LESS_THAN: begin 
-                    ALU_result <= 0; 
+                    ALU_result <= temp; 
                     ALU_zero <= 0; 
                     end
                 NOR: begin 
