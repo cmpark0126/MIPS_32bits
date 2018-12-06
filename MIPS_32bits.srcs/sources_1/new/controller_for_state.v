@@ -47,7 +47,7 @@ module controller_for_state(
             case(cs)
                 INIT : ns = (start)? IF : INIT; // when interpreter in here
                 END : ns = (resume)? INIT : END; // when program is end
-                WB : ns = IF;
+                WB : ns = IF; // When some context is clear, go to END
                 default : ns = (cs + 1); // When some context is clear, go to END
             endcase
         end
