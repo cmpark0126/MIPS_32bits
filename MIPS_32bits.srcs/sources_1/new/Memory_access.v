@@ -52,7 +52,7 @@ module Memory_access(
         end
     end
     
-    always @(posedge clk or posedge rst) begin
+    always @(negedge clk or posedge rst) begin
         if(rst) begin
             read_data_from_memory <= 32'd0;
         end
