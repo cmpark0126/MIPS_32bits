@@ -48,14 +48,14 @@ module controller_for_state(
                 INIT : ns = (start)? IF : INIT; // when interpreter in here
                 END : ns = (resume)? INIT : END; // when program is end
                 WB : ns = IF;
-                default : ns = (cs + 1); 
+                default : ns = (cs + 1); // When some context is clear, go to END
             endcase
         end
         else begin
             case(cs)
-                INIT : ns = (start)? IF : INIT; // when interpreter in here
+                INIT : ns = (start)? ID : INIT; // when interpreter in here
                 END : ns = (resume)? INIT : END; // when program is end
-                WB : ns = INIT; // only one instruction going on
+                WB : ns = END; // only one instruction going on
                 default : ns = (cs + 1); 
             endcase
         end
