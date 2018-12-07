@@ -37,12 +37,6 @@ module Memory_access(
     always @(posedge clk or posedge rst) begin
         if(rst) begin
             temp <= 32'd0;
-            {BRAM[0], BRAM[1], BRAM[2], BRAM[3]} = 32'h00000001;
-            {BRAM[4], BRAM[5], BRAM[6], BRAM[7]} = 32'h00000003;
-            {BRAM[8], BRAM[9], BRAM[10], BRAM[11]} = 32'h00000005;
-            {BRAM[12], BRAM[13], BRAM[14], BRAM[15]} = 32'h00000007;
-            {BRAM[16], BRAM[17], BRAM[18], BRAM[19]} = 32'h00000009;
-            {BRAM[20], BRAM[21], BRAM[22], BRAM[23]} = 32'h00000005;
         end
         else if(cs == MEM && MemRead == 1'b1) begin
             temp <= {BRAM[address_for_memory], 
@@ -64,6 +58,12 @@ module Memory_access(
         end
         else if(cs == MEM && MemRead == 1'b1) begin
             read_data_from_memory <= temp;
+            {BRAM[0], BRAM[1], BRAM[2], BRAM[3]} = 32'h00000001;
+            {BRAM[4], BRAM[5], BRAM[6], BRAM[7]} = 32'h00000003;
+            {BRAM[8], BRAM[9], BRAM[10], BRAM[11]} = 32'h00000005;
+            {BRAM[12], BRAM[13], BRAM[14], BRAM[15]} = 32'h00000007;
+            {BRAM[16], BRAM[17], BRAM[18], BRAM[19]} = 32'h00000009;
+            {BRAM[20], BRAM[21], BRAM[22], BRAM[23]} = 32'h00000005;
         end
         else if(cs == MEM && MemWrite == 1'b1) begin
             read_data_from_memory <= read_data_from_memory;
