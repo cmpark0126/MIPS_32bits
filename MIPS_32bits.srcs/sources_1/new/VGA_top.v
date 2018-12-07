@@ -1,7 +1,17 @@
 	module VGA_top(
 		input CLK100MHZ, reset,
 		output VGA_HS, VGA_VS,
-		output [11:0] vga
+		output [11:0] vga,
+		// for register
+        input [31:0] zero,
+        input [31:0] at,
+        input [31:0] v0, v1,
+        input [31:0] a0, a1, a2, a3,
+        input [31:0] t0, t1, t2, t3, t4, t5, t6, t7,
+        input [31:0] s0, s1, s2, s3, s4, s5, s6, s7,
+        input [31:0] t8, t9,
+        input [31:0] k0, k1,
+        input [31:0] gp, sp, fp, ra
 		);
 
 		localparam COLOR_WHITE = 12'b1111_1111_1111;
@@ -40,7 +50,18 @@
 			.ball(2'd1), .dig0(4'd2), .digl(4'd3),
 			.pix_x(pixel_x), .pix_y(pixel_y),
 			.font_background(FONT_BACKGROUND),
-			.text_on(text_on), .text_rgb(text_rgb)
+			.text_on(text_on), .text_rgb(text_rgb),
+            .zero(zero),
+            .at(at),
+            .v0(v0), .v1(v1), 
+            .a0(a0), .a1(a1), .a2(a2), .a3(a3),
+            .t0(t0), .t1(t1), .t2(t2), .t3(t3),
+            .t4(t4), .t5(t5), .t6(t6), .t7(t7),
+            .s0(s0), .s1(s1), .s2(s2), .s3(s3),
+            .s4(s4), .s5(s5), .s6(s6), .s7(s7),
+            .t8(t8), .t9(t9), 
+            .k0(k0), .k1(k1), 
+            .gp(gp), .sp(sp), .fp(fp), .ra(ra)
 		);
 
 		always @(posedge CLK100MHZ, posedge reset) begin
