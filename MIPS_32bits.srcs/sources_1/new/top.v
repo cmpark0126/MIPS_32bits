@@ -27,6 +27,8 @@ module top(
     output [7:0] AN,
     output Released,
     output TxD,
+    output [11:0] vga,
+    output VGA_HS, VGA_VS,
     input RxD,
     input ps2clk,
     input ps2data,
@@ -237,6 +239,14 @@ module top(
         .RxD(RxD), 
         .TxD(TxD)
         );
+    
+    VGA_top VGA(
+        .CLK100MHZ(clk),
+        .reset(rst),
+        .VGA_HS(VGA_HS),
+        .VGA_VS(VGA_VS),
+        .vga(vga)
+    );
     
     ss_drive segment(
       .clk(clk), .rst(rst), .mask(mask),
