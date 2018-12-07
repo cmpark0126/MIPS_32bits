@@ -3,3 +3,6 @@ MIPS_32bits.hw/
 MIPS_32bits.ip_user_files/
 MIPS_32bits.runs/
 MIPS_32bits.sim/
+vivado_pid63960.str
+vivado.jou
+vivado.log
