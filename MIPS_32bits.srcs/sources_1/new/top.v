@@ -26,6 +26,8 @@ module top(
     output DP,
     output [7:0] AN,
     output Released,
+    output TxD,
+    input RxD,
     input ps2clk,
     input ps2data,
     input mode,
@@ -223,7 +225,19 @@ module top(
         // clk and rst
         .clk(clk), .rst(rst)
         );
-        
+    
+    UART_top UART (
+        .clk(clk), 
+        .rst(rst), 
+        .datain_ext(scancode), 
+        .dataout_ext(), 
+        .new_in(Released), 
+        .new_out(), 
+        .error(), 
+        .RxD(RxD), 
+        .TxD(TxD)
+        );
+    
     ss_drive segment(
       .clk(clk), .rst(rst), .mask(mask),
       .data7(data7), .data6(data6), .data5(data5), .data4(data4),
