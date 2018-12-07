@@ -126,64 +126,75 @@ module top(
         .err_ind(err_ind)
         );
     
-    always@(negedge Released) begin
+    always@(negedge Released or posedge rst) begin
         instruction_by_user = instruction_by_user;
-        start = 0;
-        resume = 0;
+        start = start;
+        resume = resume;
         
-        if (mode == 'd0) begin
-            if(scancode == 'h53 || scancode == 'h73) begin // 'S' or 's' : start // we need to ack about starting program successfully!
-                start = 1;
-                resume = 0; 
-            end
-            else if(scancode == 'h52 || scancode == 'h72) begin// 'R' or 'r' : resume
-                start = 0;
-                resume = 1; 
-            end
+        if(rst) begin
+            instruction_by_user = 'h0000_0000;
+            start = 0;
+            resume = 1;
         end
         else begin
-            if(scancode == 'h30) // 0
-                instruction_by_user = {instruction_by_user[27:0], 4'h0};
-            else if(scancode == 'h31) // 1
-                instruction_by_user = {instruction_by_user[27:0], 4'h1};
-            else if(scancode == 'h32) // 2
-                instruction_by_user = {instruction_by_user[27:0], 4'h2};
-            else if(scancode == 'h33) // 3
-                instruction_by_user = {instruction_by_user[27:0], 4'h3};
-            else if(scancode == 'h34) // 4
-                instruction_by_user = {instruction_by_user[27:0], 4'h4};
-            else if(scancode == 'h35) // 5
-                instruction_by_user = {instruction_by_user[27:0], 4'h5};
-            else if(scancode == 'h36) // 6
-                instruction_by_user = {instruction_by_user[27:0], 4'h6};
-            else if(scancode == 'h37) // 7
-                instruction_by_user = {instruction_by_user[27:0], 4'h7};
-            else if(scancode == 'h38) // 8
-                instruction_by_user = {instruction_by_user[27:0], 4'h8};
-            else if(scancode == 'h39) // 9
-                instruction_by_user = {instruction_by_user[27:0], 4'h9};
-            else if(scancode == 'h41 || scancode == 'h61) // 'A' or 'a'
-                instruction_by_user = {instruction_by_user[27:0], 4'hA};
-            else if(scancode == 'h42 || scancode == 'h62) // 'B' or 'b'
-                instruction_by_user = {instruction_by_user[27:0], 4'hB};
-            else if(scancode == 'h43 || scancode == 'h63) // 'C' or 'c'
-                instruction_by_user = {instruction_by_user[27:0], 4'hC};
-            else if(scancode == 'h44 || scancode == 'h64) // 'D' or 'd'
-                instruction_by_user = {instruction_by_user[27:0], 4'hD};
-            else if(scancode == 'h45 || scancode == 'h65) // 'E' or 'e'
-                instruction_by_user = {instruction_by_user[27:0], 4'hE};
-            else if(scancode == 'h46 || scancode == 'h66) // 'F' or 'f'
-                instruction_by_user = {instruction_by_user[27:0], 4'hF};
-            else if(scancode == 'h08) // BACKSPACE
-                instruction_by_user = {4'b0000, instruction_by_user[31:4]};
-            else if(scancode == 'h53 || scancode == 'h73) begin// 'S' or 's' : start
-                start = 1;
-                resume = 0; 
+            if (mode == 'd0) begin
+                if(scancode == 'h53 || scancode == 'h73) begin // 'S' or 's' : start // we need to ack about starting program successfully!
+                    start = 1;
+                    resume = 0; 
+                end
+                else if(scancode == 'h52 || scancode == 'h72) begin// 'R' or 'r' : resume
+                    start = 0;
+                    resume = 1; 
+                end
             end
-            else if(scancode == 'h52 || scancode == 'h72) begin // 'R' or 'r' : resume
-                instruction_by_user = 'd0;
-                start = 0;
-                resume = 1; 
+            else begin
+                if(resume == 1) begin
+                    if(scancode == 'h30) // 0
+                        instruction_by_user = {instruction_by_user[27:0], 4'h0};
+                    else if(scancode == 'h31) // 1
+                        instruction_by_user = {instruction_by_user[27:0], 4'h1};
+                    else if(scancode == 'h32) // 2
+                        instruction_by_user = {instruction_by_user[27:0], 4'h2};
+                    else if(scancode == 'h33) // 3
+                        instruction_by_user = {instruction_by_user[27:0], 4'h3};
+                    else if(scancode == 'h34) // 4
+                        instruction_by_user = {instruction_by_user[27:0], 4'h4};
+                    else if(scancode == 'h35) // 5
+                        instruction_by_user = {instruction_by_user[27:0], 4'h5};
+                    else if(scancode == 'h36) // 6
+                        instruction_by_user = {instruction_by_user[27:0], 4'h6};
+                    else if(scancode == 'h37) // 7
+                        instruction_by_user = {instruction_by_user[27:0], 4'h7};
+                    else if(scancode == 'h38) // 8
+                        instruction_by_user = {instruction_by_user[27:0], 4'h8};
+                    else if(scancode == 'h39) // 9
+                        instruction_by_user = {instruction_by_user[27:0], 4'h9};
+                    else if(scancode == 'h41 || scancode == 'h61) // 'A' or 'a'
+                        instruction_by_user = {instruction_by_user[27:0], 4'hA};
+                    else if(scancode == 'h42 || scancode == 'h62) // 'B' or 'b'
+                        instruction_by_user = {instruction_by_user[27:0], 4'hB};
+                    else if(scancode == 'h43 || scancode == 'h63) // 'C' or 'c'
+                        instruction_by_user = {instruction_by_user[27:0], 4'hC};
+                    else if(scancode == 'h44 || scancode == 'h64) // 'D' or 'd'
+                        instruction_by_user = {instruction_by_user[27:0], 4'hD};
+                    else if(scancode == 'h45 || scancode == 'h65) // 'E' or 'e'
+                        instruction_by_user = {instruction_by_user[27:0], 4'hE};
+                    else if(scancode == 'h46 || scancode == 'h66) // 'F' or 'f'
+                        instruction_by_user = {instruction_by_user[27:0], 4'hF};
+                    else if(scancode == 'h08) // BACKSPACE
+                        instruction_by_user = {4'b0000, instruction_by_user[31:4]};
+                    else if(scancode == 'h53 || scancode == 'h73) begin// 'S' or 's' : start
+                        start = 1;
+                        resume = 0; 
+                    end
+                end
+                else begin
+                    if(scancode == 'h52 || scancode == 'h72) begin // 'R' or 'r' : resume
+                        instruction_by_user = 'd0;
+                        start = 0;
+                        resume = 1; 
+                    end
+                end
             end
         end
     end
