@@ -43,6 +43,8 @@ module top(
     wire clk_100;
     wire n_clk;
     
+    assign n_clk = clk;
+    
     // for state
     wire [3:0] cs, ns;
     reg start, resume;
@@ -82,11 +84,11 @@ module top(
        .locked()
        );      // output locked
     
-    clk_div clk_div0(
-       .en_out(n_clk),
-       .clk(clk), .rst(rst),
-       .divided_by(`DIVISOR)
-       );
+//    clk_div clk_div0(
+//       .en_out(n_clk),
+//       .clk(clk), .rst(rst),
+//       .divided_by(`DIVISOR)
+//       );
     
     controller_for_state controller_for_state0(
         .cs(cs), .ns(ns),

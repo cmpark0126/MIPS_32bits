@@ -31,7 +31,7 @@ module Add4toPC(
     
     always @(negedge clk or posedge rst) begin // this time we use negedge, because write action in here
        if(rst) outPC <= 32'd0;
-       else if(cs == IF) outPC <= (inPC == 32'd12)? 32'd0 : inPC + 32'd4; // debuging
+       else if(cs == IF) outPC <= inPC + 32'd4; // debuging
        else outPC <= outPC;
     end
     
