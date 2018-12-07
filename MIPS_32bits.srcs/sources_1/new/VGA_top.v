@@ -18,7 +18,7 @@
 		localparam COLOR_RED = 12'b0000_0000_1111;
 		localparam COLOR_BLACK = 12'b0000_0000_0000;
 		localparam COLOR_BLUE = 12'b1111_0000_0000;
-		localparam FONT_BACKGROUND = 12'b0000_1111_1111;
+		localparam FONT_BACKGROUND = 12'b1111_1111_1111;
 
 		localparam MONITOR_WIDTH = 640;
 		localparam MONITOR_HEIGHT = 480;
