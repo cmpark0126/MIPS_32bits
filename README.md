@@ -2,7 +2,7 @@
 Implements 32bits MIPS with verilog. (18.11.25 ~)
 
 # supported instruction set
-add, addi, sub, and, or, slt, lw, sw, beq, j
+add, addi, sub, and, or, slt, lw, sw, beq, j, SYSCALL
 
 # Mode
 0 > Inner Program running
