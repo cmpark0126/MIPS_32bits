@@ -35,6 +35,7 @@ module controller_for_state(
     parameter WB  = 4'd4;
     parameter INIT = 4'd5;
     parameter END  = 4'd6; 
+    parameter STOP  = 4'd7; 
     
     always @ (negedge clk or posedge rst) begin
         if(rst)
@@ -47,15 +48,16 @@ module controller_for_state(
         if(mode == 'd0) begin
             case(cs)
                 INIT : ns = (start)? IF : INIT; // when interpreter in here
-                END : ns = END; // when program is end
-                WB : ns = (syscall_inst)? END : IF; // When some context is clear, go to END
-                default : ns = (syscall_inst)? END : (cs + 1); // When some context is clear, go to END
+                STOP : ns = STOP;
+                WB : ns = (syscall_inst)? STOP : IF; // When some context is clear, go to END
+                default : ns = (syscall_inst)? STOP : (cs + 1); // When some context is clear, go to END
             endcase
         end
         else begin
             case(cs)
                 INIT : ns = (start)? ID : INIT; // when interpreter in here
                 END : ns = (resume)? INIT : END; // when program is end
+                STOP : ns = STOP; // cannot resume at STOP
                 WB : ns = END; // only one instruction going on
                 default : ns = (cs + 1); 
             endcase

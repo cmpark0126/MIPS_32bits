@@ -49,7 +49,7 @@ module tb_top();
     end
     
     initial begin
-        #200000 $stop;
+        #2000 $stop;
     end
 
 endmodule
