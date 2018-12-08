@@ -11,7 +11,9 @@
         input [31:0] s0, s1, s2, s3, s4, s5, s6, s7,
         input [31:0] t8, t9,
         input [31:0] k0, k1,
-        input [31:0] gp, sp, fp, ra
+        input [31:0] gp, sp, fp, ra,
+        input [3:0] cs,
+        input start, resume, mode, debug_mode 
 		);
 
 		localparam COLOR_WHITE = 12'b1111_1111_1111;
@@ -61,7 +63,8 @@
             .s4(s4), .s5(s5), .s6(s6), .s7(s7),
             .t8(t8), .t9(t9), 
             .k0(k0), .k1(k1), 
-            .gp(gp), .sp(sp), .fp(fp), .ra(ra)
+            .gp(gp), .sp(sp), .fp(fp), .ra(ra),
+            .start(start), .resume(resume), .cs(cs), .mode(mode), .debug_mode(debug_mode) 
 		);
 
 		always @(posedge CLK100MHZ, posedge reset) begin

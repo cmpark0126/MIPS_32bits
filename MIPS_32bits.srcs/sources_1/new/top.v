@@ -259,7 +259,8 @@ module top(
         .s4(s4), .s5(s5), .s6(s6), .s7(s7),
         .t8(t8), .t9(t9), 
         .k0(k0), .k1(k1), 
-        .gp(gp), .sp(sp), .fp(fp), .ra(ra)
+        .gp(gp), .sp(sp), .fp(fp), .ra(ra),
+        .start(start), .resume(resume), .cs(cs), .mode(mode), .debug_mode(debug_mode) 
         );
     
     ss_drive segment(

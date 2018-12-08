@@ -16,7 +16,9 @@ module text_rom
     input [31:0] s0, s1, s2, s3, s4, s5, s6, s7,
     input [31:0] t8, t9,
     input [31:0] k0, k1,
-    input [31:0] gp, sp, fp, ra
+    input [31:0] gp, sp, fp, ra,
+    input [3:0] cs,
+    input start, resume, mode, debug_mode 
 );
 
 localparam COLOR_WHITE = 12'b1111_1111_1111;
@@ -730,6 +732,57 @@ always @* begin
    endcase
 end
 
+// bottom
+assign score_on[13] = (pix_y[9:5] == 14) && (pix_x[9:4] < 16);
+assign row_addr_s[13] = pix_y [4:1]; 
+assign bit_addr_s[13] = pix_x [3:1]; 
+
+always @* begin
+   case (pix_x [7:4])
+      4'h0: char_addr_s[13] = 7'h73; // s 
+      4'h1: char_addr_s[13] = 7'h3a; // :
+      4'h2: char_addr_s[13] = 7'h30 + start; // var
+      4'h3: char_addr_s[13] = 7'h00; // 
+      4'h4: char_addr_s[13] = 7'h72; // r
+      4'h5: char_addr_s[13] = 7'h3a; // :
+      4'h6: char_addr_s[13] = 7'h30 + resume; // var
+      4'h7: char_addr_s[13] = 7'h00; // 
+      4'h8: char_addr_s[13] = 7'h63; // c
+      4'h9: char_addr_s[13] = 7'h73; // s 
+      4'ha: char_addr_s[13] = 7'h3a; // :
+      4'hb: char_addr_s[13] = (cs < 10)? cs + 7'h30 : cs + 7'h57;
+      4'hc: char_addr_s[13] = 7'h00; // 
+      4'hd: char_addr_s[13] = 7'h00; // 
+      4'he: char_addr_s[13] = 7'h00; // 
+      4'hf : char_addr_s[13] = 7'h00; // 
+   endcase
+end
+
+assign score_on[29] = (pix_y[9:5] == 14) && (pix_x[9:4] >= 16) && (pix_x[9:4] < 32);
+assign row_addr_s[29] = pix_y [4:1]; 
+assign bit_addr_s[29] = pix_x [3:1]; 
+
+always @* begin
+   case (pix_x [7:4])
+      4'h0: char_addr_s[29] = 7'h4d; // M 
+      4'h1: char_addr_s[29] = 7'h4f; // O
+      4'h2: char_addr_s[29] = 7'h44; // D
+      4'h3: char_addr_s[29] = 7'h45; // E
+      4'h4: char_addr_s[29] = 7'h3a; // :
+      4'h5: char_addr_s[29] = 7'h30 + mode; // var
+      4'h6: char_addr_s[29] = 7'h00; // 
+      4'h7: char_addr_s[29] = 7'h44; // D
+      4'h8: char_addr_s[29] = 7'h4d; // M 
+      4'h9: char_addr_s[29] = 7'h44; // D
+      4'ha: char_addr_s[29] = 7'h45; // E
+      4'hb: char_addr_s[29] = 7'h3a; // :
+      4'hc: char_addr_s[29] = 7'h30 + debug_mode; // var
+      4'hd: char_addr_s[29] = 7'h00; // 
+      4'he: char_addr_s[29] = 7'h00; // 
+      4'hf : char_addr_s[29] = 7'h00; // 
+   endcase
+end
+
 always @* begin
 	char_addr = 7'h00;
 	row_addr = 4'h0;
@@ -827,6 +880,13 @@ always @* begin
             if(font_bit)
                 text_rgb = SCORE_COLOR;
         end
+    else if(score_on[13]) begin
+            char_addr = char_addr_s[13];
+            row_addr = row_addr_s[13];
+            bit_addr = bit_addr_s[13];
+            if(font_bit)
+                text_rgb = LOG_COLOR;
+        end
     else if(score_on[16]) begin
             char_addr = char_addr_s[16];
             row_addr = row_addr_s[16];
@@ -917,6 +977,13 @@ always @* begin
             bit_addr = bit_addr_s[28];
             if(font_bit)
                 text_rgb = SCORE_COLOR;
+        end
+    else if(score_on[29]) begin
+            char_addr = char_addr_s[29];
+            row_addr = row_addr_s[29];
+            bit_addr = bit_addr_s[29];
+            if(font_bit)
+                text_rgb = LOG_COLOR;
         end
 end
 
