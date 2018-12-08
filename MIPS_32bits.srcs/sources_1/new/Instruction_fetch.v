@@ -37,7 +37,7 @@ module Instruction_fetch(
     */
     
     // for debug
-    wire [7:0] BRAM [0:512];
+    wire [7:0] BRAM [0:511];
     assign {BRAM[0], BRAM[1], BRAM[2], BRAM[3]}     = 32'h20100000; // addi s0 zero 0x0 
     assign {BRAM[4], BRAM[5], BRAM[6], BRAM[7]}     = 32'h20110014; // addi s1 zero 0x14 
     assign {BRAM[8], BRAM[9], BRAM[10], BRAM[11]}   = 32'h8e280000; // lw $t0, 0($s1)
