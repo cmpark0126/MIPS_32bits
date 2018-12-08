@@ -35,7 +35,7 @@ module tb_top();
         .DP(DP),
         .AN(AN),
         .clk(clk), .rst(rst),
-        .mode(mode[0]), .sseg_mode(mode[1]), .register_number(),
+        .mode(mode[0]), .debug_mode(0), .sseg_mode(mode[1]), .register_number(),
         .Released(Released), .ps2clk(PS2_CLK), .ps2data(PS2_DATA),
         .RxD(), .TxD(TxD)
         );
@@ -195,7 +195,7 @@ module tb_top();
     end
     
     initial begin
-        #200000 $stop;
+        #20000 $stop;
     end
 
 endmodule

@@ -22,7 +22,7 @@
 
 module controller_for_state(
     output reg [3:0] cs, ns,
-    input mode,
+    input mode, debug_mode,
     input start, resume,
     input syscall_inst,
     input clk, rst
@@ -46,12 +46,23 @@ module controller_for_state(
     
     always @ (*) begin
         if(mode == 'd0) begin
-            case(cs)
-                INIT : ns = (start)? IF : INIT; // when interpreter in here
-                STOP : ns = STOP;
-                WB : ns = (syscall_inst)? STOP : IF; // When some context is clear, go to END
-                default : ns = (syscall_inst)? STOP : (cs + 1); // When some context is clear, go to END
-            endcase
+            if(debug_mode == 'd0) begin
+                case(cs)
+                    INIT : ns = (start)? IF : INIT; // when interpreter in here
+                    STOP : ns = STOP;
+                    WB : ns = (syscall_inst)? STOP : IF; // When some context is clear, go to END
+                    default : ns = (syscall_inst)? STOP : (cs + 1); // When some context is clear, go to END
+                endcase
+            end
+            else begin
+                case(cs)
+                    INIT : ns = (start)? IF : INIT; // when interpreter in here
+                    END : ns = (resume)? INIT : END; // when program is end
+                    STOP : ns = STOP;
+                    WB : ns = (syscall_inst)? STOP : END; // When some context is clear, go to END
+                    default : ns = (syscall_inst)? STOP : (cs + 1); // When some context is clear, go to END
+                endcase
+            end
         end
         else begin
             case(cs)

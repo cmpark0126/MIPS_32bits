@@ -62,7 +62,7 @@ module Memory_access(
             {BRAM[12], BRAM[13], BRAM[14], BRAM[15]} <= 32'h00000007;
             {BRAM[16], BRAM[17], BRAM[18], BRAM[19]} <= 32'h00000009;
             {BRAM[20], BRAM[21], BRAM[22], BRAM[23]} <= 32'h00000005;
-            for(ii = 10'd24; ii < 10'd512; ii = ii + 10'd1) BRAM[ii] <= 8'd0;
+//            for(ii = 10'd24; ii < 10'd512; ii = ii + 10'd1) BRAM[ii] <= 8'd0;
 //            for(ii = 32'd0; ii < 32'd32; ii = ii + 32'd1) BRAM[ii] <= 32'd0;
         end
         else if(cs == MEM && MemRead == 1'b1) begin
@@ -71,16 +71,16 @@ module Memory_access(
         end
         else if(cs == MEM && MemWrite == 1'b1) begin
             read_data_from_memory <= read_data_from_memory;
-            for(ii = 10'd0; ii < address_for_memory; ii = ii + 10'd1) BRAM[ii] <= BRAM[ii];
+//            for(ii = 10'd0; ii < address_for_memory; ii = ii + 10'd1) BRAM[ii] <= BRAM[ii];
             {BRAM[address_for_memory], 
              BRAM[address_for_memory + 1], 
              BRAM[address_for_memory + 2], 
              BRAM[address_for_memory + 3]} <= temp;
-             for(ii = address_for_memory + 4; ii < 10'd512; ii = ii + 10'd1) BRAM[ii] <= BRAM[ii];
+//             for(ii = address_for_memory + 4; ii < 10'd512; ii = ii + 10'd1) BRAM[ii] <= BRAM[ii];
         end
         else begin 
             read_data_from_memory <= read_data_from_memory;
-            for(ii = 10'd0; ii < 10'd512; ii = ii + 10'd1) BRAM[ii] <= BRAM[ii];
+//            for(ii = 10'd0; ii < 10'd512; ii = ii + 10'd1) BRAM[ii] <= BRAM[ii];
         end
     end
     

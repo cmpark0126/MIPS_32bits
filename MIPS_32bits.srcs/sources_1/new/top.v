@@ -33,6 +33,7 @@ module top(
     input ps2clk,
     input ps2data,
     input mode,
+    input debug_mode,
     input sseg_mode,
     input [4:0] register_number,
     input clk, rst
@@ -92,7 +93,7 @@ module top(
     
     controller_for_state controller_for_state0(
         .cs(cs), .ns(ns),
-        .mode(mode),
+        .mode(mode), .debug_mode(debug_mode),
         .start(start), .resume(resume),
         .syscall_inst(syscall_inst),
         .clk(n_clk), .rst(rst)
