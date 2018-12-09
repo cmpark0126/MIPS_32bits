@@ -19,17 +19,14 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-`define DIVISOR 10000000
 
 module top(
     output [6:0] sseg,
     output DP,
     output [7:0] AN,
     output Released,
-    output TxD,
     output [11:0] vga,
     output VGA_HS, VGA_VS,
-    input RxD,
     input ps2clk,
     input ps2data,
     input mode,
@@ -84,12 +81,6 @@ module top(
        .reset(rst), // input reset
        .locked()
        );      // output locked
-    
-//    clk_div clk_div0(
-//       .en_out(n_clk),
-//       .clk(clk), .rst(rst),
-//       .divided_by(`DIVISOR)
-//       );
     
     controller_for_state controller_for_state0(
         .cs(cs), .ns(ns),
@@ -230,19 +221,17 @@ module top(
         // clk and rst
         .clk(clk), .rst(rst)
         );
-    
-    UART_top UART (
-        .clk(clk), 
-        .rst(rst), 
-        .datain_ext(scancode), 
-        .dataout_ext(), 
-        .new_in(Released), 
-        .new_out(), 
-        .error(), 
-        .RxD(RxD), 
-        .TxD(TxD)
-        );
-    
+        
+    ss_drive segment(
+        .clk(clk), .rst(rst), .mask(mask),
+        .data7(data7), .data6(data6), .data5(data5), .data4(data4),
+        .data3(data3), .data2(data2), .data1(data1), .data0(data0),
+        .ssA(sseg[0]), .ssB(sseg[1]), .ssC(sseg[2]), .ssD(sseg[3]),
+        .ssE(sseg[4]), .ssF(sseg[5]), .ssG(sseg[6]), .ssDP(DP),
+        .AN7(AN[7]), .AN6(AN[6]), .AN5(AN[5]), .AN4(AN[4]),
+        .AN3(AN[3]), .AN2(AN[2]), .AN1(AN[1]), .AN0(AN[0])
+        ); 
+
     VGA_top VGA(
         .CLK100MHZ(clk),
         .reset(rst),
@@ -263,13 +252,4 @@ module top(
         .start(start), .resume(resume), .cs(cs), .mode(mode), .debug_mode(debug_mode) 
         );
     
-    ss_drive segment(
-      .clk(clk), .rst(rst), .mask(mask),
-      .data7(data7), .data6(data6), .data5(data5), .data4(data4),
-      .data3(data3), .data2(data2), .data1(data1), .data0(data0),
-      .ssA(sseg[0]), .ssB(sseg[1]), .ssC(sseg[2]), .ssD(sseg[3]),
-      .ssE(sseg[4]), .ssF(sseg[5]), .ssG(sseg[6]), .ssDP(DP),
-      .AN7(AN[7]), .AN6(AN[6]), .AN5(AN[5]), .AN4(AN[4]),
-      .AN3(AN[3]), .AN2(AN[2]), .AN1(AN[1]), .AN0(AN[0])
-      ); 
 endmodule
