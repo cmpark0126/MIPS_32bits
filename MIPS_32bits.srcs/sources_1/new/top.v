@@ -91,9 +91,6 @@ module top(
         );
         
     datapath datapath0(
-      .mask(mask),
-      .data7(data7), .data6(data6), .data5(data5), .data4(data4),
-      .data3(data3), .data2(data2), .data1(data1), .data0(data0),
       .zero(zero),
       .at(at),
       .v0(v0), .v1(v1), 

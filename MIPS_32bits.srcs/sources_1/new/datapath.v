@@ -21,9 +21,6 @@
 
 
 module datapath(
-   // for debug
-   output [7:0] mask,
-   output [3:0] data7, data6, data5, data4, data3, data2, data1, data0,
    // for register
    output [31:0] zero,
    output [31:0] at,
