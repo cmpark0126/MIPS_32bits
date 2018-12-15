@@ -20,3 +20,9 @@ add, addi, sub, and, or, slt, lw, sw, beq, j, SYSCALL
 s : start > start inner program or interpreter
 
 r : resume > back to INIT state (when interpreter)
+
+# doc : reference
+TeamI_21400337_박천명_21400404_신다현.pdf
+
+# run project
+Please check appenix of doc
