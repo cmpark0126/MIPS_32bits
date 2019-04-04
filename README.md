@@ -1,8 +1,8 @@
 # MIPS_32bits
-Implements 32bits MIPS with verilog. (18.11.25 ~)
+Implements 32bits MIPS with verilog. (18.11.25 ~ 18.12.)
 
 # supported instruction set
-add, addi, sub, and, or, slt, lw, sw, beq, j, SYSCALL
+add, addi, sub, and, or, slt, lw, sw, beq, j, SYSCALL(partial)
 
 # Mode
 0 > Inner Program running
@@ -25,4 +25,4 @@ r : resume > back to INIT state (when interpreter)
 TeamI_21400337_박천명_21400404_신다현.pdf
 
 # run project
-Please check appenix of doc
+Please check appendix of doc
